@@ -1,328 +1,231 @@
 from kivymd.app import MDApp
-from kivymd.uix.list import OneLineAvatarIconListItem, ILeftBody
+from kivymd.uix.screen import MDScreen
+from kivymd.uix.card import MDCard
 from kivymd.uix.button import MDRaisedButton, MDFlatButton
-from kivymd.uix.selectioncontrol import MDCheckbox
-from kivymd.uix.pickers import MDDatePicker
+from kivymd.uix.list import OneLineListItem
 from kivy.lang import Builder
+from kivy.properties import StringProperty
 from kivy.core.window import Window
-from kivy.properties import BooleanProperty, StringProperty, NumericProperty
 from datetime import datetime
-import pandas as pd
 import os
+import pandas as pd
 
-Window.size = (900, 600)
-
-class LeftCheckbox(ILeftBody, MDCheckbox):
-    pass
+Window.size = (1000, 680)
 
 KV = '''
-<DrawerItem>:
-    LeftCheckbox:
-        active: root.active
-        size_hint: None, None
-        size: "24dp", "24dp"
-
-MDBoxLayout:
-    orientation: 'vertical'
-    md_bg_color: [0.93, 0.96, 1, 1]
-
-    MDTopAppBar:
-        title: "SIFAC"
-        left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
-        right_action_items: [["text-long", lambda x: app.change_font_size(1)], ["text-short", lambda x: app.change_font_size(-1)]]
-        md_bg_color: [0.12, 0.35, 0.65, 1]
-        elevation: 0
-        specific_text_color: [1, 1, 1, 1]
+MDScreen:
+    md_bg_color: 0.95, 0.97, 1, 1
 
     MDBoxLayout:
-        orientation: 'vertical'
-        padding: '40dp'
-        spacing: '20dp'
+        orientation: "vertical"
 
-        MDLabel:
-            text: "SIFAC — Sistema de Faturamento e Relatórios"
-            halign: "center"
-            bold: True
-            font_style: "H5"
-            size_hint_y: None
-            height: self.texture_size[1]
-            theme_text_color: "Primary"
-            font_size: app.font_size + 2
-
-        MDLabel:
-            text: "Organize faturamentos, lotes e relatórios de forma simples"
-            halign: "center"
-            font_style: "H6"
-            size_hint_y: None
-            height: self.texture_size[1]
-            theme_text_color: "Secondary"
-            font_size: app.font_size
+        MDTopAppBar:
+            title: "SIFAC"
+            left_action_items: [["menu", lambda x: app.open_menu()]]
+            right_action_items: [["help-circle-outline", lambda x: app.show_help()]]
+            md_bg_color: 0.12, 0.35, 0.65, 1
+            specific_text_color: 1, 1, 1, 1
+            elevation: 1
 
         MDBoxLayout:
-            orientation: 'horizontal'
-            spacing: '20dp'
-            size_hint_y: None
-            height: "50dp"
-            padding: '20dp'
+            padding: "28dp"
+            spacing: "18dp"
+            orientation: "vertical"
 
             MDLabel:
-                text: "Data Início:"
-                size_hint_x: None
-                width: "100dp"
-                halign: "right"
-                font_size: app.font_size
-
-            MDTextField:
-                id: start_date
-                hint_text: "DD/MM/AAAA"
-                text: app.start_date
-                size_hint_x: 0.4
-                font_size: app.font_size
-                on_focus: if self.focus: app.show_date_picker("start")
-
-            MDLabel:
-                text: "Data Fim:"
-                size_hint_x: None
-                width: "100dp"
-                halign: "right"
-                font_size: app.font_size
-
-            MDTextField:
-                id: end_date
-                hint_text: "DD/MM/AAAA"
-                text: app.end_date
-                size_hint_x: 0.4
-                font_size: app.font_size
-                on_focus: if self.focus: app.show_date_picker("end")
-
-        MDBoxLayout:
-            orientation: 'vertical'
-            spacing: '10dp'
-            padding: '20dp'
-            size_hint_y: None
-            height: "150dp"
-
-            MDLabel:
-                text: "Tipo de Relatório:"
+                text: "SIFAC — Sistema de Faturamento e Relatórios"
+                font_style: "H5"
                 bold: True
+                theme_text_color: "Primary"
+                halign: "center"
                 size_hint_y: None
                 height: self.texture_size[1]
-                font_size: app.font_size
 
-            MDBoxLayout:
-                orientation: 'horizontal'
-                spacing: '20dp'
+            MDLabel:
+                text: "Controle simples de faturamentos, lotes e relatórios"
+                theme_text_color: "Secondary"
+                halign: "center"
+                size_hint_y: None
+                height: self.texture_size[1]
 
-                MDRaisedButton:
-                    text: "Financeiro"
-                    on_release: app.select_report_type("financeiro")
-                    md_bg_color: [0.12, 0.35, 0.65, 1] if app.report_type == "financeiro" else [0.7, 0.8, 0.9, 1]
-                    theme_text_color: "Custom"
-                    text_color: [1, 1, 1, 1]
-                    font_size: app.font_size
+            MDGridLayout:
+                cols: 2
+                spacing: "16dp"
+                size_hint_y: None
+                height: "150dp"
 
-                MDRaisedButton:
-                    text: "Comercial"
-                    on_release: app.select_report_type("comercial")
-                    md_bg_color: [0.12, 0.35, 0.65, 1] if app.report_type == "comercial" else [0.7, 0.8, 0.9, 1]
-                    theme_text_color: "Custom"
-                    text_color: [1, 1, 1, 1]
-                    font_size: app.font_size
+                MDCard:
+                    radius: [12, 12, 12, 12]
+                    elevation: 1
+                    padding: "16dp"
+                    orientation: "vertical"
+                    MDLabel:
+                        text: "📊 CONTROLE"
+                        bold: True
+                        theme_text_color: "Primary"
+                    MDLabel:
+                        text: "Acompanhe o faturamento por mês e ano."
+                        theme_text_color: "Secondary"
+                    MDRaisedButton:
+                        text: "ABRIR CONTROLE"
+                        on_release: app.show_control()
 
-                MDRaisedButton:
-                    text: "Cobrança"
-                    on_release: app.select_report_type("cobranca")
-                    md_bg_color: [0.12, 0.35, 0.65, 1] if app.report_type == "cobranca" else [0.7, 0.8, 0.9, 1]
-                    theme_text_color: "Custom"
-                    text_color: [1, 1, 1, 1]
-                    font_size: app.font_size
+                MDCard:
+                    radius: [12, 12, 12, 12]
+                    elevation: 1
+                    padding: "16dp"
+                    orientation: "vertical"
+                    MDLabel:
+                        text: "➕ NOVO LOTE"
+                        bold: True
+                        theme_text_color: "Primary"
+                    MDLabel:
+                        text: "Cadastre um novo lote de faturamento."
+                        theme_text_color: "Secondary"
+                    MDRaisedButton:
+                        text: "LANÇAR LOTE"
+                        on_release: app.new_lot()
 
-        MDRaisedButton:
-            text: "GERAR RELATÓRIO"
-            icon: "file-excel"
-            size_hint: None, None
-            size: "300dp", "50dp"
-            pos_hint: {"center_x": 0.5}
-            md_bg_color: [0.12, 0.35, 0.65, 1]
-            theme_text_color: "Custom"
-            text_color: [1, 1, 1, 1]
-            font_size: app.font_size
-            on_release: app.generate_report()
+                MDCard:
+                    radius: [12, 12, 12, 12]
+                    elevation: 1
+                    padding: "16dp"
+                    orientation: "vertical"
+                    MDLabel:
+                        text: "🔎 PESQUISAR"
+                        bold: True
+                        theme_text_color: "Primary"
+                    MDLabel:
+                        text: "Consulte registros e pacientes."
+                        theme_text_color: "Secondary"
+                    MDRaisedButton:
+                        text: "PESQUISAR"
+                        on_release: app.search_records()
+
+                MDCard:
+                    radius: [12, 12, 12, 12]
+                    elevation: 1
+                    padding: "16dp"
+                    orientation: "vertical"
+                    MDLabel:
+                        text: "📄 RELATÓRIOS"
+                        bold: True
+                        theme_text_color: "Primary"
+                    MDLabel:
+                        text: "Exporte dados para Excel."
+                        theme_text_color: "Secondary"
+                    MDRaisedButton:
+                        text: "GERAR RELATÓRIO"
+                        on_release: app.generate_report()
+
+            MDCard:
+                radius: [12, 12, 12, 12]
+                elevation: 1
+                padding: "16dp"
+                orientation: "vertical"
+                size_hint_y: None
+                height: "160dp"
+
+                MDLabel:
+                    text: "VISÃO INICIAL"
+                    bold: True
+                    theme_text_color: "Primary"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDBoxLayout:
+                    spacing: "12dp"
+                    MDLabel:
+                        text: "Ano\n2026"
+                        halign: "center"
+                        theme_text_color: "Secondary"
+                    MDLabel:
+                        text: "Meses lançados\n06 a 09"
+                        halign: "center"
+                        theme_text_color: "Secondary"
+                    MDLabel:
+                        text: "Guias registradas\n132"
+                        halign: "center"
+                        theme_text_color: "Secondary"
+                    MDLabel:
+                        text: "Faturamento\nR$ 46.756,73"
+                        halign: "center"
+                        theme_text_color: "Secondary"
 
     MDNavigationDrawer:
-        id: nav_drawer
-        radius: (0, 0, 0, 0)
-        elevation: 0
-        md_bg_color: [1, 1, 1, 0.95]
-
+        id: nav
+        radius: [0, 0, 0, 0]
         MDBoxLayout:
-            orientation: 'vertical'
-            padding: '20dp'
-            spacing: '20dp'
-            adaptive_height: True
-
+            orientation: "vertical"
+            padding: "20dp"
+            spacing: "8dp"
             MDLabel:
                 text: "SIFAC"
                 font_style: "H4"
                 bold: True
                 size_hint_y: None
                 height: self.texture_size[1]
-                theme_text_color: "Primary"
-                font_size: app.font_size + 4
-
             MDLabel:
-                text: "Sistema de Faturamento e Relatórios"
-                font_style: "Caption"
+                text: "Menu principal"
+                theme_text_color: "Secondary"
                 size_hint_y: None
                 height: self.texture_size[1]
-                theme_text_color: "Secondary"
-                font_size: app.font_size
-
-            ScrollView:
-                MDList:
-                    id: menu_list
-                    padding: 0
-                    spacing: '10dp'
+            OneLineListItem:
+                text: "Controle de faturamento"
+                on_release: app.show_control()
+            OneLineListItem:
+                text: "Novo lote"
+                on_release: app.new_lot()
+            OneLineListItem:
+                text: "Pesquisar"
+                on_release: app.search_records()
+            OneLineListItem:
+                text: "Relatórios"
+                on_release: app.generate_report()
+            OneLineListItem:
+                text: "Ajuda"
+                on_release: app.show_help()
 '''
 
-class DrawerItem(OneLineAvatarIconListItem):
-    active = BooleanProperty(False)
-
 class SIFAC(MDApp):
-    report_type = StringProperty("financeiro")
-    start_date = StringProperty("")
-    end_date = StringProperty("")
-    font_size = NumericProperty(16)
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        today = datetime.today()
-        self.start_date = f"01/{today.month:02d}/{today.year}"
-        self.end_date = f"{today.day:02d}/{today.month:02d}/{today.year}"
-
     def build(self):
         self.theme_cls.primary_palette = "Blue"
         self.theme_cls.theme_style = "Light"
+        self.title = "SIFAC"
         return Builder.load_string(KV)
 
-    def on_start(self):
-        menu_items = [
-            {"text": "Financeiro", "active": False},
-            {"text": "Comercial", "active": False},
-            {"text": "Cobrança", "active": False},
-            {"text": "Histórico", "active": True},
-            {"text": "Ajuda", "active": False}
-        ]
-        for item in menu_items:
-            list_item = DrawerItem(text=item["text"])
-            list_item.active = item["active"]
-            list_item.bind(on_release=self.select_menu_item)
-            self.root.ids.menu_list.add_widget(list_item)
+    def close_menu(self):
+        self.root.ids.nav.set_state("close")
 
-    def select_menu_item(self, instance):
-        for item in self.root.ids.menu_list.children:
-            if hasattr(item, 'active'):
-                item.active = False
-        instance.active = True
-        self.root.ids.nav_drawer.set_state("close")
-        if "Financeiro" in instance.text:
-            self.select_report_type("financeiro")
-        elif "Comercial" in instance.text:
-            self.select_report_type("comercial")
-        elif "Cobrança" in instance.text:
-            self.select_report_type("cobranca")
-        elif "Histórico" in instance.text:
-            self.show_report_history()
-        elif "Ajuda" in instance.text:
-            self.help()
+    def open_menu(self):
+        self.root.ids.nav.set_state("open")
 
-    def select_report_type(self, report_type):
-        self.report_type = report_type
-        print(f"Tipo de relatório selecionado: {report_type.capitalize()}")
+    def show_control(self):
+        self.close_menu()
+        print("Controle de faturamento — estrutura inicial pronta.")
 
-    def show_date_picker(self, field):
-        current_date = self.start_date if field == "start" else self.end_date
-        try:
-            day, month, year = map(int, current_date.split('/'))
-            date_obj = datetime(year, month, day)
-        except ValueError:
-            date_obj = datetime.now()
+    def new_lot(self):
+        self.close_menu()
+        print("Novo lote — formulário inicial pronto para evolução.")
 
-        picker = MDDatePicker(
-            year=date_obj.year,
-            month=date_obj.month,
-            day=date_obj.day,
-            on_save=lambda instance, value, date_range: self.set_date(field, value)
-        )
-        picker.open()
-
-    def set_date(self, field, date):
-        formatted_date = date.strftime("%d/%m/%Y")
-        if field == "start":
-            self.start_date = formatted_date
-        else:
-            self.end_date = formatted_date
+    def search_records(self):
+        self.close_menu()
+        print("Pesquisa — estrutura inicial pronta para evolução.")
 
     def generate_report(self):
-        if not self.report_type:
-            print("Selecione um tipo de relatório antes de gerar")
-            return
-
-        start = self.root.ids.start_date.text
-        end = self.root.ids.end_date.text
-
-        print(f"Gerando relatório {self.report_type.upper()}...")
-        print(f"Período: {start} a {end}")
-
+        self.close_menu()
         data = {
-            'Tipo': [self.report_type.capitalize()],
-            'Data inicial': [start],
-            'Data final': [end]
+            "Sistema": ["SIFAC"],
+            "Data de geração": [datetime.now().strftime("%d/%m/%Y %H:%M")],
+            "Observação": ["Estrutura inicial do relatório."]
         }
-        df = pd.DataFrame(data)
+        filename = f"sifac_relatorio_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
+        pd.DataFrame(data).to_excel(filename, index=False)
+        print(f"Relatório criado: {os.path.abspath(filename)}")
 
-        filename = f"sifac_relatorio_{self.report_type}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
-        df.to_excel(filename, index=False)
-
-        print(f"Relatório gerado com sucesso! Salvo como {filename}")
-
-        from kivymd.uix.dialog import MDDialog
-        dialog = MDDialog(
-            title="Relatório gerado",
-            text=f"Relatório SIFAC salvo como {filename}",
-            buttons=[
-                MDRaisedButton(
-                    text="Abrir pasta",
-                    on_release=lambda _: self.open_folder(filename)
-                ),
-                MDFlatButton(
-                    text="OK",
-                    on_release=lambda _: dialog.dismiss()
-                )
-            ]
-        )
-        dialog.open()
-
-    def open_folder(self, filename):
-        try:
-            folder = os.path.dirname(os.path.abspath(filename))
-            os.startfile(folder)
-        except Exception:
-            print(f"Pasta não encontrada: {folder}")
-
-    def change_font_size(self, delta):
-        self.font_size = max(12, min(24, self.font_size + delta))
-        print(f"Tamanho da fonte alterado para: {self.font_size}")
-
-    def show_report_history(self):
-        print("Mostrando histórico de relatórios do SIFAC...")
-
-    def help(self):
-        print("Abrindo ajuda do SIFAC...")
-
-    def exit_app(self):
-        print("Saindo do SIFAC...")
-        self.stop()
+    def show_help(self):
+        self.close_menu()
+        print("SIFAC: use Controle, Novo lote, Pesquisar ou Relatórios.")
 
 if __name__ == "__main__":
     SIFAC().run()
