@@ -15,25 +15,34 @@ O SIFAC foi pensado para:
 - reduzir tarefas manuais repetitivas;
 - funcionar de forma simples para pessoas com diferentes níveis de familiaridade com tecnologia.
 
-O projeto está sendo desenvolvido de forma incremental, começando pela organização dos dados e dos relatórios e evoluindo para uma aplicação multiplataforma.
-
 ## Visão do aplicativo
 
-A evolução planejada do SIFAC contempla:
+A evolução do SIFAC contempla **celular e computador**, usando a mesma aplicação e a mesma estrutura de dados.
 
-**📱 Celular**
+**Celular**
 - consulta de faturamentos;
 - lançamento de novos lotes;
 - conferência de informações;
-- registro por foto/documento como etapa de automação futura.
+- futura leitura de foto/documento.
 
-**💻 Computador**
+**Computador**
 - painel de acompanhamento;
 - pesquisa de registros;
 - controle mensal e anual;
-- geração e organização de relatórios.
+- geração de relatórios.
 
-A ideia é que celular e computador utilizem a mesma estrutura de dados, permitindo continuidade do trabalho entre dispositivos.
+## Abrir no celular
+
+O repositório agora contém a configuração para gerar um **APK Android de teste** automaticamente pelo GitHub Actions.
+
+No GitHub:
+1. Abra a aba **Actions**.
+2. Entre em **Build SIFAC Android APK**.
+3. Clique em **Run workflow** para gerar manualmente.
+4. Quando terminar, baixe o artefato **sifac-apk**.
+5. Dentro do ZIP estará o APK para instalar no Android.
+
+> Esta é uma build de desenvolvimento/teste. Assinatura de distribuição e publicação em loja ficam para uma etapa posterior.
 
 ## Funcionalidades em desenvolvimento
 
@@ -49,26 +58,20 @@ A ideia é que celular e computador utilizem a mesma estrutura de dados, permiti
 - Evolução para sincronização entre dispositivos
 - Automação de leitura de documentos
 
-## Tecnologias atuais
+## Tecnologias
 
-- **Python 3.9+**
+- **Python**
+- **Kivy**
 - **KivyMD**
-- **Pandas**
-- **Openpyxl**
-- **Dateutil**
+- **Buildozer**
+- GitHub Actions para build Android
 
-As tecnologias podem evoluir conforme o projeto avance para uma arquitetura multiplataforma.
-
-## Estrutura atual
-
-A versão atual do projeto é uma base de aplicação desktop para geração e organização de relatórios.
-
-Arquivos principais:
+## Arquivos principais
 
 - `main.py` — aplicação principal
-- `build.py` — processo de empacotamento
-- `criar_atalho.py` — criação de atalho
-- `sistema-de-relat195179rios.ico` — ícone da aplicação
+- `build.py` — processo de empacotamento desktop
+- `buildozer.spec` — configuração do APK Android
+- `.github/workflows/build-apk.yml` — automação de build Android
 
 ## Privacidade
 
@@ -80,12 +83,4 @@ Os exemplos e testes do projeto devem utilizar **dados fictícios ou anonimizado
 
 🚧 **Em desenvolvimento**
 
-O projeto está passando de uma solução de relatórios para uma aplicação de controle de faturamento mais completa e simples de utilizar.
-
-## Licença
-
-Este projeto está licenciado sob a Licença MIT.
-
----
-
-Desenvolvido por **Aléxia Mendes**.
+A carcaça atual está preparada para evoluir para um aplicativo multiplataforma.
