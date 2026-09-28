@@ -1,63 +1,108 @@
 # NEXA — Plataforma de Gestão para Clínicas
 
-O **NEXA** é a plataforma principal. Ela organiza módulos independentes para diferentes etapas da operação de uma clínica.
+O **NEXA** é a plataforma principal para organizar módulos independentes da operação clínica, mantendo atendimento, faturamento e administração separados por domínio.
 
 ## Estrutura do produto
 
-- **Instrua** — agenda, pacientes, confirmações e instruções.
-- **Nexa Bill** — faturamento, lotes, guias, protocolos e relatórios de faturamento.
-- **Nexa Admin** — gestão e administração.
-- **Central** — pesquisa e visão unificada.
+- **Instrua** — jornada clínica: agenda, pacientes, consultas, confirmações, check-in, instruções e notificações.
+- **Nexa Bill** — faturamento: guias, lotes, protocolos, conferência, valores, importação e relatórios.
+- **Nexa Admin** — administração: usuários, perfis, configurações, auditoria e indicadores.
+- **Central** — busca e visão unificada, respeitando permissões e o contexto da clínica.
 
-O antigo projeto **SIFAC** passa a ser o módulo **Nexa Bill** dentro do ecossistema NEXA. O conceito de faturamento continua separado do módulo clínico, permitindo que cada parte evolua sem transformar o produto em um único bloco de funcionalidades.
+O antigo projeto **SIFAC** é agora o módulo **Nexa Bill**. O faturamento continua separado do fluxo clínico para manter a experiência simples e permitir evolução independente.
+
+## Arquitetura-alvo
+
+A primeira etapa será um **monólito modular** com API central e banco PostgreSQL multi-tenant:
+
+```text
+Android / Windows / Web
+          ↓
+       NEXA API
+          ↓
+      PostgreSQL
+          ↓
+   módulos do NEXA
+```
+
+A separação entre módulos será feita por domínio dentro do mesmo backend. Microserviços ficam como possibilidade futura, não como requisito do MVP.
+
+## Multi-tenant e segurança
+
+Toda entidade pertencente a uma clínica deverá carregar o contexto do tenant. A API deve aplicar esse contexto em todas as consultas e comandos.
+
+Perfis planejados:
+
+- PLATFORM_ADMIN
+- COMPANY_OWNER
+- COMPANY_ADMIN
+- RECEPTION
+- CLINICAL
+- BILLING
+- PATIENT
+
+Antes de dados reais, o projeto deverá ter autenticação, autorização por papel, trilha de auditoria, backups e proteção de documentos.
 
 ## Estado atual
 
-O repositório já possui:
-
-- 📱 workflow para build Android;
-- 💻 workflow para build Windows;
+- 📱 workflow Android configurado;
+- 💻 workflow Windows configurado;
 - 🧪 CI e testes básicos;
-- 🧩 estrutura inicial da plataforma modular;
-- 🔒 orientação para não colocar dados reais de pacientes no repositório público.
+- 🧩 shell inicial modular;
+- 🔒 política de não usar dados reais no repositório público.
 
-## Arquitetura planejada
+> Os workflows ainda precisam ser validados em execução real. A existência do YAML não significa que o APK/EXE já foi comprovadamente gerado com sucesso.
 
-**Android / Windows / Web → API → banco central**
+## Próximas etapas
 
-A plataforma pode futuramente usar uma base local no celular para conectividade limitada e sincronização posterior.
+1. Estruturar o backend modular.
+2. Formalizar o modelo multi-tenant.
+3. Criar API REST documentada.
+4. Implementar autenticação e RBAC.
+5. Evoluir Instrua.
+6. Criar o domínio Nexa Bill.
+7. Adicionar auditoria e backups.
+8. Depois, importar Excel/PDF e implementar OCR com conferência humana.
+9. Mais adiante, adicionar cache/offline e sincronização.
 
-### Módulos
+## Regras para documentos e dados
 
-`NEXA`
-→ `Instrua`
-→ `Nexa Bill`
-→ `Nexa Admin`
-→ `Central`
+Nunca enviar ao GitHub:
 
-## Próximas etapas técnicas
+- nomes reais de pacientes;
+- documentos pessoais;
+- informações clínicas;
+- protocolos reais;
+- planilhas reais;
+- tokens, senhas ou segredos.
 
-1. Tirar dados fixos do painel e usar base local.
-2. Criar cadastro real de lotes e pesquisa no Nexa Bill.
-3. Integrar API + banco central.
-4. Adicionar importação de Excel/PDF.
-5. Adicionar OCR com conferência antes de salvar.
-6. Criar autenticação, perfis de acesso, backup e trilha de alterações antes de dados reais.
+Use dados fictícios ou anonimizados nos exemplos e testes.
 
-## Privacidade
+## Estrutura sugerida
 
-O código público não deve conter nomes reais de pacientes, documentos pessoais, informações clínicas, protocolos reais ou outros dados identificáveis.
+```text
+nexa/
+├── modules/
+│   ├── instrua/
+│   ├── nexa_bill/
+│   ├── nexa_admin/
+│   └── central/
+├── core/
+│   ├── auth/
+│   ├── tenant/
+│   ├── audit/
+│   └── storage/
+├── tests/
+└── docs/
+```
 
-Use apenas dados fictícios ou anonimizados durante o desenvolvimento.
+## Build e CI/CD
 
-## Arquivos principais
+- `.github/workflows/ci.yml` — sintaxe, testes e validações;
+- `.github/workflows/build-apk.yml` — Android;
+- `.github/workflows/build-windows.yml` — Windows.
 
-- `main.py` — aplicação principal NEXA
-- `buildozer.spec` — configuração Android
-- `.github/workflows/build-apk.yml` — build Android
-- `.github/workflows/ci.yml` — testes e validação
-- `.github/workflows/build-windows.yml` — build Windows
-- `tests/test_basic.py` — testes iniciais
+O pipeline deve bloquear merges quando testes falharem.
 
 ## Status
 
