@@ -1,0 +1,38 @@
+name: Build SIFAC Windows
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependências
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-mobile.txt pyinstaller
+
+      - name: Gerar executável
+        shell: pwsh
+        run: |
+          pyinstaller --noconfirm --clean --onefile --name SIFAC main.py
+
+      - name: Publicar EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: sifac-windows
+          path: dist/SIFAC.exe
+          if-no-files-found: error
+          retention-days: 14
