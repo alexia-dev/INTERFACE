@@ -1,4 +1,4 @@
-name: SIFAC CI
+name: NEXA CI
 
 on:
   push:
