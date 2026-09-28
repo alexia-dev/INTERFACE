@@ -1,4 +1,4 @@
-name: Build SIFAC Windows
+name: Build NEXA Windows
 
 on:
   workflow_dispatch:
@@ -27,12 +27,12 @@ jobs:
       - name: Gerar executável
         shell: pwsh
         run: |
-          pyinstaller --noconfirm --clean --onefile --name SIFAC main.py
+          pyinstaller --noconfirm --clean --onefile --name NEXA main.py
 
       - name: Publicar EXE
         uses: actions/upload-artifact@v4
         with:
-          name: sifac-windows
-          path: dist/SIFAC.exe
+          name: nexa-windows
+          path: dist/NEXA.exe
           if-no-files-found: error
           retention-days: 14
