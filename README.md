@@ -1,86 +1,56 @@
 # SIFAC — Sistema de Faturamento e Relatórios
 
-O **SIFAC** é um projeto em desenvolvimento voltado para organizar e automatizar rotinas de faturamento e geração de relatórios.
+O **SIFAC** está evoluindo de uma base de relatórios para uma aplicação multiplataforma de controle de faturamento.
 
-A proposta é transformar processos que normalmente ficam espalhados entre planilhas, documentos e conferências manuais em um fluxo mais simples, organizado e fácil de acompanhar.
+## Onde estamos
 
-## Objetivo
+O repositório já possui estrutura para:
 
-O SIFAC foi pensado para:
+- 📱 gerar APK Android por GitHub Actions;
+- 💻 preparar build do aplicativo para Windows;
+- 🧪 validar a estrutura automaticamente com testes;
+- 🔒 manter o repositório sem dados reais de pacientes ou documentos.
 
-- organizar informações de faturamento por ano e mês;
-- registrar lotes, protocolos, quantidades e valores;
-- facilitar a consulta de registros;
-- gerar relatórios organizados;
-- reduzir tarefas manuais repetitivas;
-- funcionar de forma simples para pessoas com diferentes níveis de familiaridade com tecnologia.
+## Android
 
-## Visão do aplicativo
+O workflow **Build SIFAC Android APK** gera uma build de desenvolvimento e publica o APK como artefato.
 
-A evolução do SIFAC contempla **celular e computador**, usando a mesma aplicação e a mesma estrutura de dados.
+No GitHub: **Actions → Build SIFAC Android APK → Run workflow → sifac-apk**.
 
-**Celular**
-- consulta de faturamentos;
-- lançamento de novos lotes;
-- conferência de informações;
-- futura leitura de foto/documento.
+## Windows
 
-**Computador**
-- painel de acompanhamento;
-- pesquisa de registros;
-- controle mensal e anual;
-- geração de relatórios.
+O workflow **Build SIFAC Windows** prepara um executável `.exe` sob demanda ou a partir de uma tag v*.
 
-## Abrir no celular
+## Próximas etapas técnicas
 
-O repositório agora contém a configuração para gerar um **APK Android de teste** automaticamente pelo GitHub Actions.
+1. Tirar os dados fixos do painel e passar para uma base local.
+2. Criar cadastro real de lotes e pesquisa.
+3. Migrar o armazenamento para uma API + banco central quando a sincronização celular/computador entrar.
+4. Adicionar importação de Excel/PDF.
+5. Adicionar OCR posteriormente, sempre mostrando os campos identificados para conferência antes de salvar.
+6. Criar autenticação, perfis de acesso, backup e trilha de alterações antes de usar dados reais.
 
-No GitHub:
-1. Abra a aba **Actions**.
-2. Entre em **Build SIFAC Android APK**.
-3. Clique em **Run workflow** para gerar manualmente.
-4. Quando terminar, baixe o artefato **sifac-apk**.
-5. Dentro do ZIP estará o APK para instalar no Android.
+## Arquitetura planejada
 
-> Esta é uma build de desenvolvimento/teste. Assinatura de distribuição e publicação em loja ficam para uma etapa posterior.
+**Android / Windows / Web → API → banco central**
 
-## Funcionalidades em desenvolvimento
-
-- Controle por ano e mês
-- Cadastro de lotes
-- Registro de protocolos
-- Controle de quantidade de guias
-- Controle de valores
-- Status de processamento
-- Pesquisa de registros
-- Relatórios em Excel
-- Dashboard de acompanhamento
-- Evolução para sincronização entre dispositivos
-- Automação de leitura de documentos
-
-## Tecnologias
-
-- **Python**
-- **Kivy**
-- **KivyMD**
-- **Buildozer**
-- GitHub Actions para build Android
-
-## Arquivos principais
-
-- `main.py` — aplicação principal
-- `build.py` — processo de empacotamento desktop
-- `buildozer.spec` — configuração do APK Android
-- `.github/workflows/build-apk.yml` — automação de build Android
+No celular, uma base local pode ser usada para permitir trabalho com conectividade limitada e posterior sincronização.
 
 ## Privacidade
 
-O repositório não deve conter dados reais de pacientes, documentos pessoais, informações clínicas, protocolos reais ou qualquer outro dado identificável.
+O código público não deve conter nomes reais de pacientes, documentos pessoais, informações clínicas, protocolos reais ou outros dados identificáveis.
 
-Os exemplos e testes do projeto devem utilizar **dados fictícios ou anonimizados**.
+Para desenvolvimento, use apenas dados fictícios ou anonimizados.
+
+## Arquivos principais
+
+- `main.py` — aplicação
+- `buildozer.spec` — configuração Android
+- `.github/workflows/build-apk.yml` — build Android
+- `.github/workflows/ci.yml` — testes e validação
+- `.github/workflows/build-windows.yml` — build Windows
+- `tests/test_basic.py` — testes iniciais
 
 ## Status
 
-🚧 **Em desenvolvimento**
-
-A carcaça atual está preparada para evoluir para um aplicativo multiplataforma.
+🚧 Em desenvolvimento
