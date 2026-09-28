@@ -1,17 +1,17 @@
 [app]
 
-title = NEXA
+title = NEXA Clínica
 package.name = nexa
-package.domain = org.nexa
+package.domain = br.com.nexa
 source.dir = .
 source.include_exts = py,kv,png,jpg,jpeg,atlas,ico
-version = 0.2.0
+version = 0.3.0
 entrypoint = main.py
 source.include_patterns = assets/*,data/*
-source.exclude_patterns = .git/*,.github/*,bin/*,.buildozer/*,__pycache__/*
+source.exclude_patterns = .git/*,.github/*,bin/*,.buildozer/*,__pycache__/*,tests/*
 orientation = portrait
 android.archs = arm64-v8a
-name = NEXA
+name = NEXA Clínica
 requirements = python3,kivy==2.3.0,kivymd==1.2.0
 
 [buildozer]
@@ -29,3 +29,4 @@ fullscreen = 0
 android.entrypoint = org.kivy.android.PythonActivity
 android.private_storage = True
 android.copy_libs = 1
+android.permissions = INTERNET
