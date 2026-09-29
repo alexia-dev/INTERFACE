@@ -9,7 +9,7 @@ O **NEXA** é a plataforma principal para organizar módulos independentes da op
 - **Nexa Admin** — administração: usuários, perfis, configurações, auditoria e indicadores.
 - **Central** — busca e visão unificada, respeitando permissões e o contexto da clínica.
 
-O antigo projeto **SIFAC** é agora o módulo **Nexa Bill**. O faturamento continua separado do fluxo clínico para manter a experiência simples e permitir evolução independente.
+O módulo de faturamento do NEXA utiliza a identidade **Nexa Bill**. O faturamento continua separado do fluxo clínico para manter a experiência simples e permitir evolução independente.
 
 ## Arquitetura-alvo
 
@@ -103,6 +103,12 @@ nexa/
 - `.github/workflows/build-windows.yml` — Windows.
 
 O pipeline deve bloquear merges quando testes falharem.
+
+## Interface
+
+A interface do NEXA segue a linguagem visual migrada das telas antigas do projeto: estética clínica moderna, superfícies claras, lilás/violeta como acento, cartões com cantos arredondados e navegação modular.
+
+O nome e a identidade apresentados na interface são **NEXA**.
 
 ## Status
 
