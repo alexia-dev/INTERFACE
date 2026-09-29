@@ -2,7 +2,6 @@ from pathlib import Path
 
 from kivy.core.window import Window
 from kivy.lang import Builder
-from kivy.properties import ObjectProperty
 from kivymd.app import MDApp
 
 from core.database import Database
@@ -16,10 +15,6 @@ from screens.instrua import InstruaScreen
 
 
 class NEXA(MDApp):
-    database = ObjectProperty(None)
-    appointments = ObjectProperty(None)
-    billing = ObjectProperty(None)
-
     def build(self):
         self.theme_cls.primary_palette = "DeepPurple"
         self.theme_cls.theme_style = "Light"
@@ -28,12 +23,11 @@ class NEXA(MDApp):
         # Keep the Android keyboard from covering the active form field.
         Window.softinput_mode = "resize"
 
-        # Kivy provides a writable per-app directory on each target platform.
         self.database = Database(Path(self.user_data_dir) / "nexa.db")
         self.appointments = AppointmentRepository(self.database)
         self.billing = BillingRepository(self.database)
 
-        root = Path(__file__).resolve().parent
+        root_dir = Path(__file__).resolve().parent
         for filename in (
             "theme.kv",
             "app.kv",
@@ -43,14 +37,15 @@ class NEXA(MDApp):
             "admin.kv",
             "central.kv",
         ):
-            Builder.load_file(str(root / "ui" / filename))
+            Builder.load_file(str(root_dir / "ui" / filename))
 
-        screen_manager = self._build_screens()
-        self._configure_mobile_window()
-        return screen_manager
+        root = Builder.load_file(str(root_dir / "ui" / "app.kv"))
+        self._build_screens(root)
+        return root
 
-    def _build_screens(self):
-        screen_manager = self.root.ids.screen_manager
+    @staticmethod
+    def _build_screens(root):
+        screen_manager = root.ids.screen_manager
         screens = (
             (HomeScreen, "home"),
             (InstruaScreen, "instrua"),
@@ -60,12 +55,6 @@ class NEXA(MDApp):
         )
         for screen_class, name in screens:
             screen_manager.add_widget(screen_class(name=name))
-        return self.root
-
-    def _configure_mobile_window(self):
-        # Portrait is the primary Android layout; desktop remains resizable.
-        if Window.width < 700:
-            Window.fullscreen = False
 
     def open_menu(self):
         self.root.ids.nav.set_state("open")
