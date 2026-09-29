@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from core.database import Database
 
@@ -8,7 +8,7 @@ class AppointmentRepository:
         self.database = database
 
     def create(self, patient_name: str, appointment_type: str) -> int:
-        created_at = datetime.now().isoformat(timespec="seconds")
+        created_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
         return self.database.execute(
             """
             INSERT INTO appointments(patient_name, appointment_type, created_at)
@@ -28,3 +28,9 @@ class AppointmentRepository:
             (limit,),
         )
         return [dict(row) for row in rows]
+
+    def delete(self, appointment_id: int) -> None:
+        self.database.execute(
+            "DELETE FROM appointments WHERE id = ?",
+            (appointment_id,),
+        )
