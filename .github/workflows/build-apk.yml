@@ -43,14 +43,38 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           python -m pip install "buildozer>=1.5.0" "cython<3.1"
 
-      - name: Preparar Android SDK
+      - name: Preparar SDK Android usado pelo Buildozer
         shell: bash
         run: |
-          export ANDROID_HOME="$HOME/.buildozer/android/platform/android-sdk"
-          mkdir -p "$ANDROID_HOME/licenses"
-          printf '%s\n' '24333f8a63b6825ea9c5514f83c2829b004d1fee' > "$ANDROID_HOME/licenses/android-sdk-license"
-          printf '%s\n' '84831b9409646a918e30573bab4c9c91346d8abd' >> "$ANDROID_HOME/licenses/android-sdk-license"
-          printf '%s\n' 'd56f5187479451eabf01fb78af6dfcb131a6481e' >> "$ANDROID_HOME/licenses/android-sdk-license"
+          set +e
+          buildozer -v android debug
+          BOOTSTRAP_EXIT=$?
+          set -e
+
+          export SDK_ROOT="$HOME/.buildozer/android/platform/android-sdk"
+          echo "SDK_ROOT=$SDK_ROOT"
+
+          if [ -x "$SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" ]; then
+            SDKMANAGER="$SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
+          elif [ -x "$SDK_ROOT/tools/bin/sdkmanager" ]; then
+            SDKMANAGER="$SDK_ROOT/tools/bin/sdkmanager"
+          else
+            echo "sdkmanager não encontrado após o bootstrap do Buildozer."
+            exit 1
+          fi
+
+          echo "Aceitando licenças Android..."
+          yes | "$SDKMANAGER" --sdk_root="$SDK_ROOT" --licenses || true
+
+          echo "Instalando componentes Android necessários..."
+          yes | "$SDKMANAGER" --sdk_root="$SDK_ROOT" \
+            "platform-tools" \
+            "platforms;android-35" \
+            "build-tools;37.0.0"
+
+          "$SDKMANAGER" --sdk_root="$SDK_ROOT" --list_installed
+
+          echo "Bootstrap terminou com código $BOOTSTRAP_EXIT; a compilação final será executada na próxima etapa."
 
       - name: Gerar APK de teste
         run: buildozer -v android debug
