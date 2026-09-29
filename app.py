@@ -3,6 +3,7 @@ from pathlib import Path
 from kivy.core.window import Window
 from kivy.lang import Builder
 from kivymd.app import MDApp
+from kivymd.uix.snackbar import Snackbar
 
 from core.database import Database
 from repositories.appointments import AppointmentRepository
@@ -19,8 +20,6 @@ class NEXA(MDApp):
         self.theme_cls.primary_palette = "DeepPurple"
         self.theme_cls.theme_style = "Light"
         self.title = "NEXA"
-
-        # Keep the Android keyboard from covering the active form field.
         Window.softinput_mode = "resize"
 
         self.database = Database(Path(self.user_data_dir) / "nexa.db")
@@ -79,11 +78,7 @@ class NEXA(MDApp):
         self.toast("Use o menu para acessar os módulos do NEXA.")
 
     def toast(self, message):
-        try:
-            from kivymd.uix.snackbar import Snackbar
-            Snackbar(text=message).open()
-        except Exception:
-            print(message)
+        Snackbar(text=message).open()
 
 
 if __name__ == "__main__":
