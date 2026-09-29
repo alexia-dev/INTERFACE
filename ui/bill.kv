@@ -11,43 +11,57 @@
             specific_text_color: 1, 1, 1, 1
 
         MDScrollView:
+            do_scroll_x: False
+
             MDBoxLayout:
                 orientation: "vertical"
-                padding: "24dp"
-                spacing: "14dp"
+                padding: dp(16) if self.width < dp(600) else dp(24)
+                spacing: dp(12) if self.width < dp(600) else dp(14)
                 size_hint_y: None
                 height: self.minimum_height
 
                 NexaTitle:
                     text: "Faturamento"
+                    font_size: "21sp" if self.width < dp(600) else "22sp"
 
                 NexaCard:
                     orientation: "vertical"
                     size_hint_y: None
-                    height: "210dp"
+                    height: dp(250) if self.width < dp(600) else dp(210)
+
                     MDTextField:
                         id: bill_patient
                         hint_text: "Paciente / atendimento"
                         mode: "rectangle"
+                        size_hint_x: 1
+
                     MDTextField:
                         id: bill_value
                         hint_text: "Valor (ex.: 350,00)"
                         mode: "rectangle"
+                        input_type: "number"
+                        size_hint_x: 1
+
                     NexaButton:
                         text: "LANÇAR FATURAMENTO"
+                        size_hint_x: 1
                         on_release: root.add_bill()
+
                     MDLabel:
                         id: bill_status
                         text: "Nenhum lançamento nesta sessão."
                         theme_text_color: "Secondary"
+                        text_size: self.width, None
 
                 NexaSection:
                     text: "Lançamentos recentes"
 
                 NexaCard:
                     size_hint_y: None
-                    height: "170dp"
+                    height: dp(190) if self.width < dp(600) else dp(170)
+
                     MDLabel:
                         id: recent_billing
                         text: "Carregando..."
                         theme_text_color: "Secondary"
+                        text_size: self.width, None
