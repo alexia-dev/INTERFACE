@@ -25,23 +25,24 @@ class NEXA(MDApp):
         self.theme_cls.theme_style = "Light"
         self.title = "NEXA"
 
-        # App.user_data_dir is the platform-safe writable directory for app data.
+        # Kivy provides a writable per-app directory on each target platform.
         self.database = Database(Path(self.user_data_dir) / "nexa.db")
         self.appointments = AppointmentRepository(self.database)
         self.billing = BillingRepository(self.database)
 
         root = Path(__file__).resolve().parent
-        Builder.load_file(str(root / "ui" / "theme.kv"))
-        for filename in ("app.kv", "home.kv", "instrua.kv", "bill.kv", "admin.kv", "central.kv"):
+        for filename in (
+            "theme.kv",
+            "app.kv",
+            "home.kv",
+            "instrua.kv",
+            "bill.kv",
+            "admin.kv",
+            "central.kv",
+        ):
             Builder.load_file(str(root / "ui" / filename))
 
-        return Builder.load_string("MDScreenManager:") if False else self._root_widget()
-
-    def _root_widget(self):
-        # app.kv defines a single MDScreen root. Loading it last keeps the
-        # screen tree easy to locate while each visual screen stays editable
-        # in its own KV file.
-        return Builder.load_file(str(Path(__file__).resolve().parent / "ui" / "app.kv"))
+        return self.root
 
     def open_menu(self):
         self.root.ids.nav.set_state("open")
