@@ -1,41 +1,48 @@
 <AdminScreen>:
-    md_bg_color: 0.988, 0.973, 1, 1
+    md_bg_color: 0.035, 0.018, 0.075, 1
 
     MDBoxLayout:
         orientation: "vertical"
-
         MDTopAppBar:
-            title: "NEXA / NEXA ADMIN"
+            title: "NEXA ADMIN   |   Gestão"
             left_action_items: [["arrow-left", lambda x: app.go_home()]]
-            md_bg_color: 0.388, 0.055, 0.831, 1
-            specific_text_color: 1, 1, 1, 1
-
+            md_bg_color: 0.06, 0.025, 0.12, 0.96
+            specific_text_color: 1, 0.90, 1, 1
         MDBoxLayout:
             orientation: "vertical"
-            padding: "24dp"
-            spacing: "14dp"
-
+            padding: dp(22)
+            spacing: dp(14)
             NexaTitle:
                 text: "Administração"
-
             NexaCard:
                 orientation: "vertical"
                 size_hint_y: None
-                height: "260dp"
+                height: dp(270)
                 MDLabel:
                     text: "USUÁRIOS E PERFIS"
                     bold: True
-                    theme_text_color: "Primary"
+                    theme_text_color: "Custom"
+                    text_color: 0.95, 0.84, 1, 1
                 MDLabel:
                     text: "Administradores  •  2"
+                    theme_text_color: "Custom"
+                    text_color: 0.80, 0.74, 0.88, 1
                 MDLabel:
                     text: "Recepção  •  4"
+                    theme_text_color: "Custom"
+                    text_color: 0.80, 0.74, 0.88, 1
                 MDLabel:
                     text: "Faturamento  •  2"
+                    theme_text_color: "Custom"
+                    text_color: 0.80, 0.74, 0.88, 1
                 MDLabel:
                     text: "Clínico  •  6"
+                    theme_text_color: "Custom"
+                    text_color: 0.80, 0.74, 0.88, 1
                 MDLabel:
                     text: "Auditoria: ativa"
+                    theme_text_color: "Custom"
+                    text_color: 0.60, 0.95, 0.78, 1
                 NexaButton:
                     text: "ATUALIZAR CONFIGURAÇÕES"
                     on_release: root.save_status()
