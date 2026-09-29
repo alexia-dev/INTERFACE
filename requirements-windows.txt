@@ -2,3 +2,4 @@ kivy==2.3.0
 kivymd==1.2.0
 pyinstaller==6.16.0
 pywin32==311
+requests==2.32.5
