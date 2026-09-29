@@ -7,8 +7,8 @@ O NEXA não é um aplicativo monolítico de uso exclusivo para clínicas. Ele é
 ### Aplicativos
 
 - **Instrua** — jornada de atendimento, agenda, instruções, confirmação e check-in.
-- **Nexa Bill** — faturamento e relatórios.
-- **Nexa AI** — assistente e recursos de IA (planejado).
+- **Nexa Bill** — faturamento, lotes, protocolos, conferência e relatórios.
+- **Nexa AI** — assistente e recursos de IA.
 - **Nexa Study** — estudo e aprendizagem (planejado).
 - **Nexa Work** — carreira e produtividade (planejado).
 - **Nexa Central** — hub opcional do ecossistema.
@@ -16,6 +16,17 @@ O NEXA não é um aplicativo monolítico de uso exclusivo para clínicas. Ele é
 ### Princípio
 
 Baixe somente o aplicativo que precisa. Use uma conta NEXA para acessar vários produtos e, quando disponível, assine recursos premium individualmente ou por bundles.
+
+## Fundação implementada
+
+A branch `feature/nexa-ecosystem` já prepara o cliente para os primeiros contratos de plataforma:
+
+- catálogo de aplicativos;
+- organizações;
+- entitlements/planos;
+- resumo da jornada do Instrua;
+- cliente REST para `/me`, organizações, apps, entitlements e jornada;
+- temas Light/Dark persistentes no shell visual.
 
 ## Estrutura atual
 
@@ -33,23 +44,9 @@ Frontend em Kivy + KivyMD:
 
 ## Contrato de plataforma
 
-A API compartilhada deve evoluir para expor:
-
-- identidade/autenticação;
-- perfil do usuário;
-- organizações e memberships;
-- catálogo de aplicativos;
-- entitlements/planos;
-- assinaturas e pagamentos;
-- notificações;
-- arquivos;
-- auditoria.
+A API compartilhada deve evoluir para expor identidade/autenticação, perfil, organizações, catálogo de aplicativos, entitlements/planos, notificações, arquivos, auditoria e serviços de produto.
 
 Os domínios de produto continuam separados. O cliente não é a fonte de verdade para autorização, assinatura ou isolamento de dados.
-
-## Aplicativos e repositórios
-
-Neste estágio, `alexia-dev/Nexa` permanece como cliente/Central e `alexia-dev/Instrua` permanece separado como backend/API do Instrua. Novos produtos podem ganhar repositórios próprios sem quebrar o ecossistema.
 
 ## Segurança
 
@@ -60,4 +57,4 @@ Neste estágio, `alexia-dev/Nexa` permanece como cliente/Central e `alexia-dev/I
 
 ## Estado
 
-Fundação em implementação. A conexão completa cliente -> plataforma -> produto será fechada em etapas, com testes antes de considerar produção.
+Fundação em implementação. Os novos contratos de plataforma foram adicionados sem remover o shell existente. Antes de produção, precisamos validar build, testes, banco e integração ponta a ponta.
