@@ -4,6 +4,8 @@ from typing import Any
 
 import requests
 
+from core.config import api_base_url
+
 
 class ApiError(RuntimeError):
     def __init__(self, status_code: int, message: str):
@@ -13,25 +15,30 @@ class ApiError(RuntimeError):
 
 
 class ApiClient:
-    """Small REST client shared by desktop and Android builds."""
+    """REST client for shared NEXA services and product APIs."""
 
-    def __init__(self, base_url: str = "http://127.0.0.1:8080"):
-        self.base_url = base_url.rstrip("/")
+    def __init__(self, base_url: str | None = None):
+        self.base_url = (base_url or api_base_url()).rstrip("/")
         self.access_token: str | None = None
-        self.company_id: str | None = None
+        self.organization_id: str | None = None
 
     def configure(self, base_url: str | None = None) -> None:
         if base_url:
             self.base_url = base_url.rstrip("/")
 
+    def set_context(self, *, organization_id: str | None = None) -> None:
+        self.organization_id = organization_id
+
     def clear_session(self) -> None:
         self.access_token = None
-        self.company_id = None
+        self.organization_id = None
 
     def _request(self, method: str, path: str, **kwargs: Any) -> Any:
-        headers = kwargs.pop("headers", {})
+        headers = dict(kwargs.pop("headers", {}))
         if self.access_token:
             headers["Authorization"] = f"Bearer {self.access_token}"
+        if self.organization_id:
+            headers["X-NEXA-Organization"] = self.organization_id
 
         response = requests.request(
             method,
@@ -57,13 +64,31 @@ class ApiClient:
             return response.text
 
     def login(self, email: str, password: str) -> dict[str, Any]:
-        payload = {"email": email, "password": password}
-        data = self._request("POST", "/api/v1/auth/login", json=payload)
+        data = self._request(
+            "POST",
+            "/api/v1/auth/login",
+            json={"email": email, "password": password},
+        )
         self.access_token = data["accessToken"]
         return data
 
     def list_companies(self) -> list[dict[str, Any]]:
         return self._request("GET", "/api/v1/companies")
 
+    def list_apps(self) -> list[dict[str, Any]]:
+        return self._request("GET", "/api/v1/apps")
+
+    def get_me(self) -> dict[str, Any]:
+        return self._request("GET", "/api/v1/me")
+
+    def get_entitlements(self) -> list[dict[str, Any]]:
+        return self._request("GET", "/api/v1/me/entitlements")
+
+    def get_organizations(self) -> list[dict[str, Any]]:
+        return self._request("GET", "/api/v1/me/organizations")
+
     def list_patients(self, company_id: str) -> list[dict[str, Any]]:
         return self._request("GET", f"/api/v1/companies/{company_id}/patients")
+
+    def list_appointments(self, company_id: str) -> list[dict[str, Any]]:
+        return self._request("GET", f"/api/v1/companies/{company_id}/appointments")
