@@ -1,0 +1,53 @@
+<BillScreen>:
+    md_bg_color: 0.988, 0.973, 1, 1
+
+    MDBoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: "NEXA / NEXA BILL"
+            left_action_items: [["arrow-left", lambda x: app.go_home()]]
+            md_bg_color: 0.388, 0.055, 0.831, 1
+            specific_text_color: 1, 1, 1, 1
+
+        MDScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                padding: "24dp"
+                spacing: "14dp"
+                size_hint_y: None
+                height: self.minimum_height
+
+                NexaTitle:
+                    text: "Faturamento"
+
+                NexaCard:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: "210dp"
+                    MDTextField:
+                        id: bill_patient
+                        hint_text: "Paciente / atendimento"
+                        mode: "rectangle"
+                    MDTextField:
+                        id: bill_value
+                        hint_text: "Valor (ex.: 350,00)"
+                        mode: "rectangle"
+                    NexaButton:
+                        text: "LANÇAR FATURAMENTO"
+                        on_release: root.add_bill()
+                    MDLabel:
+                        id: bill_status
+                        text: "Nenhum lançamento nesta sessão."
+                        theme_text_color: "Secondary"
+
+                NexaSection:
+                    text: "Lançamentos recentes"
+
+                NexaCard:
+                    size_hint_y: None
+                    height: "170dp"
+                    MDLabel:
+                        id: recent_billing
+                        text: "Carregando..."
+                        theme_text_color: "Secondary"
