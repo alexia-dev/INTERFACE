@@ -1,12 +1,13 @@
 <AdminScreen>:
-    md_bg_color: 0.035, 0.018, 0.075, 1
+    md_bg_color: app.bg_color
 
     MDBoxLayout:
         orientation: "vertical"
         MDTopAppBar:
             title: "NEXA ADMIN   |   Gestão"
             left_action_items: [["arrow-left", lambda x: app.go_home()]]
-            md_bg_color: 0.06, 0.025, 0.12, 0.96
+            right_action_items: [["theme-light-dark", lambda x: app.toggle_theme()]]
+            md_bg_color: app.surface_color
             specific_text_color: 1, 0.90, 1, 1
         MDBoxLayout:
             orientation: "vertical"
@@ -22,23 +23,23 @@
                     text: "USUÁRIOS E PERFIS"
                     bold: True
                     theme_text_color: "Custom"
-                    text_color: 0.95, 0.84, 1, 1
+                    text_color: app.text_color
                 MDLabel:
                     text: "Administradores  •  2"
                     theme_text_color: "Custom"
-                    text_color: 0.80, 0.74, 0.88, 1
+                    text_color: app.muted_color
                 MDLabel:
                     text: "Recepção  •  4"
                     theme_text_color: "Custom"
-                    text_color: 0.80, 0.74, 0.88, 1
+                    text_color: app.muted_color
                 MDLabel:
                     text: "Faturamento  •  2"
                     theme_text_color: "Custom"
-                    text_color: 0.80, 0.74, 0.88, 1
+                    text_color: app.muted_color
                 MDLabel:
                     text: "Clínico  •  6"
                     theme_text_color: "Custom"
-                    text_color: 0.80, 0.74, 0.88, 1
+                    text_color: app.muted_color
                 MDLabel:
                     text: "Auditoria: ativa"
                     theme_text_color: "Custom"
