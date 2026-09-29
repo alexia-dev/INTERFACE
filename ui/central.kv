@@ -1,0 +1,36 @@
+<CentralScreen>:
+    md_bg_color: 0.988, 0.973, 1, 1
+
+    MDBoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: "NEXA / CENTRAL"
+            left_action_items: [["arrow-left", lambda x: app.go_home()]]
+            md_bg_color: 0.388, 0.055, 0.831, 1
+            specific_text_color: 1, 1, 1, 1
+
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: "24dp"
+            spacing: "14dp"
+
+            NexaTitle:
+                text: "Pesquisa unificada"
+
+            MDTextField:
+                id: search_input
+                hint_text: "Pesquisar paciente ou atendimento"
+                mode: "rectangle"
+
+            NexaButton:
+                text: "PESQUISAR"
+                on_release: root.search()
+
+            NexaCard:
+                size_hint_y: None
+                height: "190dp"
+                MDLabel:
+                    id: search_result
+                    text: "Digite algo para pesquisar nos dados locais."
+                    theme_text_color: "Secondary"
