@@ -1,4 +1,5 @@
 from kivymd.app import MDApp
+
 from screens.base import NexaScreen
 
 
@@ -11,7 +12,7 @@ def parse_brl_to_cents(value: str) -> int | None:
         return None
     if amount < 0:
         return None
-    return int(round(amount * 100))
+    return round(amount * 100)
 
 
 def format_brl(cents: int) -> str:
@@ -34,6 +35,15 @@ class BillScreen(NexaScreen):
         self.ids.bill_patient.text = ""
         self.ids.bill_value.text = ""
         self.ids.bill_status.text = "Faturamento salvo com sucesso."
+        self.refresh_recent()
+
+    def delete_latest(self):
+        rows = MDApp.get_running_app().billing.recent(1)
+        if not rows:
+            self.ids.bill_status.text = "Não há lançamento para excluir."
+            return
+        MDApp.get_running_app().billing.delete(rows[0]["id"])
+        self.ids.bill_status.text = "Último lançamento excluído."
         self.refresh_recent()
 
     def refresh_recent(self):
