@@ -92,3 +92,6 @@ class ApiClient:
 
     def list_appointments(self, company_id: str) -> list[dict[str, Any]]:
         return self._request("GET", f"/api/v1/companies/{company_id}/appointments")
+
+    def get_journey_summary(self, company_id: str) -> dict[str, Any]:
+        return self._request("GET", f"/api/v1/companies/{company_id}/journey/summary")
