@@ -1,7 +1,7 @@
 #:import dp kivy.metrics.dp
 
 MDScreen:
-    md_bg_color: 0.035, 0.018, 0.075, 1
+    md_bg_color: app.bg_color
 
     MDNavigationLayout:
         MDScreenManager:
@@ -11,7 +11,7 @@ MDScreen:
             id: nav
             drawer_type: "modal"
             radius: [0, dp(18), dp(18), 0]
-            md_bg_color: 0.055, 0.025, 0.11, 0.98
+            md_bg_color: app.surface_color
 
             MDBoxLayout:
                 orientation: "vertical"
@@ -62,3 +62,7 @@ MDScreen:
                 OneLineListItem:
                     text: "?   Ajuda"
                     on_release: app.show_help()
+
+                OneLineListItem:
+                    text: "☀ / ☾   Tema"
+                    on_release: app.toggle_theme()
