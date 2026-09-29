@@ -81,7 +81,7 @@ jobs:
 
           test -x "$SDK_ROOT/build-tools/35.0.0/aidl"
           "$SDK_ROOT/build-tools/35.0.0/aidl" --version || true
-          "$SDKMANAGER" --sdk_root="$SDK_ROOT" --list_installed
+          "$SDKMANAGER" --sdk_root="$SDK_ROOT" --list
 
       - name: Preparar dependências Python
         run: |
