@@ -7,21 +7,6 @@ MDScreen:
         MDScreenManager:
             id: screen_manager
 
-            HomeScreen:
-                name: "home"
-
-            InstruaScreen:
-                name: "instrua"
-
-            BillScreen:
-                name: "bill"
-
-            AdminScreen:
-                name: "admin"
-
-            CentralScreen:
-                name: "central"
-
         MDNavigationDrawer:
             id: nav
             drawer_type: "modal"
@@ -30,8 +15,8 @@ MDScreen:
 
             MDBoxLayout:
                 orientation: "vertical"
-                padding: dp(22)
-                spacing: dp(8)
+                padding: dp(18) if self.width < dp(500) else dp(22)
+                spacing: dp(6)
 
                 MDLabel:
                     text: "NEXA"
@@ -46,6 +31,7 @@ MDScreen:
                     theme_text_color: "Secondary"
                     size_hint_y: None
                     height: self.texture_size[1]
+                    text_size: self.width, None
 
                 Widget:
 
