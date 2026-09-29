@@ -1,19 +1,20 @@
 import os
-import ctypes
-import winreg
 from pathlib import Path
+
+import winreg
+
 
 def get_desktop_path():
     try:
         with winreg.OpenKey(
             winreg.HKEY_CURRENT_USER,
-            r"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders"
+            r"Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders",
         ) as key:
             desktop = winreg.QueryValueEx(key, "Desktop")[0]
             expanded = os.path.expandvars(desktop)
             if os.path.isdir(expanded):
                 return expanded
-    except Exception:
+    except OSError:
         pass
 
     for candidate in (
@@ -26,6 +27,7 @@ def get_desktop_path():
         if candidate.is_dir():
             return str(candidate)
     return os.getcwd()
+
 
 def criar_atalho(executavel="NEXA.exe", nome_atalho="NEXA.lnk"):
     try:
@@ -53,6 +55,7 @@ def criar_atalho(executavel="NEXA.exe", nome_atalho="NEXA.lnk"):
     atalho.Description = "NEXA — Plataforma de Gestão para Clínicas"
     atalho.save()
     print(f"Atalho criado: {destino}")
+
 
 if __name__ == "__main__":
     criar_atalho()
