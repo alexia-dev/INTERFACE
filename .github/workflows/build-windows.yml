@@ -43,6 +43,7 @@ jobs:
         shell: pwsh
         run: |
           pip install pytest
+          $env:PYTHONPATH = "$PWD"
           pytest -q
 
       - name: Gerar executável
