@@ -1,4 +1,5 @@
 from kivymd.app import MDApp
+
 from screens.base import NexaScreen
 
 
@@ -18,6 +19,15 @@ class InstruaScreen(NexaScreen):
         self.ids.patient_input.text = ""
         self.ids.appointment_input.text = ""
         self.ids.appointment_status.text = "Agendamento salvo com sucesso."
+        self.refresh_recent()
+
+    def delete_latest(self):
+        rows = MDApp.get_running_app().appointments.recent(1)
+        if not rows:
+            self.ids.appointment_status.text = "Não há atendimento para excluir."
+            return
+        MDApp.get_running_app().appointments.delete(rows[0]["id"])
+        self.ids.appointment_status.text = "Último atendimento excluído."
         self.refresh_recent()
 
     def refresh_recent(self):
