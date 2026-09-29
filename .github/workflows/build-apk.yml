@@ -43,13 +43,14 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           python -m pip install "buildozer>=1.5.0" "cython<3.1"
 
-      - name: Pré-aceitar licenças Android SDK
+      - name: Preparar Android SDK
+        shell: bash
         run: |
-          SDKMANAGER="$HOME/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager"
-          if [ ! -x "$SDKMANAGER" ]; then
-            SDKMANAGER="$HOME/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager"
-          fi
-          yes | "$SDKMANAGER" --licenses || true
+          export ANDROID_HOME="$HOME/.buildozer/android/platform/android-sdk"
+          mkdir -p "$ANDROID_HOME/licenses"
+          printf '%s\n' '24333f8a63b6825ea9c5514f83c2829b004d1fee' > "$ANDROID_HOME/licenses/android-sdk-license"
+          printf '%s\n' '84831b9409646a918e30573bab4c9c91346d8abd' >> "$ANDROID_HOME/licenses/android-sdk-license"
+          printf '%s\n' 'd56f5187479451eabf01fb78af6dfcb131a6481e' >> "$ANDROID_HOME/licenses/android-sdk-license"
 
       - name: Gerar APK de teste
         run: buildozer -v android debug
