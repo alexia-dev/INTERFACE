@@ -24,10 +24,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements-windows.txt
 
+      - name: Verificar sintaxe
+        shell: pwsh
+        run: |
+          python -m py_compile main.py app.py build.py
+
       - name: Gerar executável
         shell: pwsh
         run: |
-          pyinstaller --noconfirm --clean --onefile --windowed --name NEXA main.py
+          pyinstaller --noconfirm --clean --onefile --windowed --name NEXA --add-data "ui;ui" --collect-all kivy --collect-all kivymd main.py
 
       - name: Publicar EXE
         uses: actions/upload-artifact@v4
