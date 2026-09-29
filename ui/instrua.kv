@@ -11,43 +11,56 @@
             specific_text_color: 1, 1, 1, 1
 
         MDScrollView:
+            do_scroll_x: False
+
             MDBoxLayout:
                 orientation: "vertical"
-                padding: "24dp"
-                spacing: "14dp"
+                padding: dp(16) if self.width < dp(600) else dp(24)
+                spacing: dp(12) if self.width < dp(600) else dp(14)
                 size_hint_y: None
                 height: self.minimum_height
 
                 NexaTitle:
                     text: "Agenda e atendimento"
+                    font_size: "21sp" if self.width < dp(600) else "22sp"
 
                 NexaCard:
                     orientation: "vertical"
                     size_hint_y: None
-                    height: "210dp"
+                    height: dp(250) if self.width < dp(600) else dp(210)
+
                     MDTextField:
                         id: patient_input
                         hint_text: "Nome do paciente"
                         mode: "rectangle"
+                        size_hint_x: 1
+
                     MDTextField:
                         id: appointment_input
                         hint_text: "Consulta / procedimento"
                         mode: "rectangle"
+                        size_hint_x: 1
+
                     NexaButton:
                         text: "AGENDAR"
+                        size_hint_x: 1
                         on_release: root.add_appointment()
+
                     MDLabel:
                         id: appointment_status
                         text: "Nenhum novo agendamento."
                         theme_text_color: "Secondary"
+                        text_size: self.width, None
 
                 NexaSection:
                     text: "Próximos atendimentos"
 
                 NexaCard:
                     size_hint_y: None
-                    height: "170dp"
+                    height: dp(190) if self.width < dp(600) else dp(170)
+
                     MDLabel:
                         id: recent_list
                         text: "Carregando..."
                         theme_text_color: "Secondary"
+                        text_size: self.width, None
