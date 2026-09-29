@@ -23,6 +23,7 @@ jobs:
         with:
           python-version: "3.11"
           cache: "pip"
+          cache-dependency-path: requirements-mobile.txt
 
       - name: Instalar dependências
         run: |
@@ -31,10 +32,10 @@ jobs:
           pip install ruff
 
       - name: Verificar sintaxe
-        run: python -m py_compile main.py
+        run: python -m py_compile main.py app.py core/database.py repositories/appointments.py repositories/billing.py screens/*.py
 
       - name: Lint
-        run: ruff check main.py tests
+        run: ruff check main.py app.py core repositories screens tests
 
       - name: Rodar testes
         run: pytest -q
