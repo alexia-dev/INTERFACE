@@ -1,6 +1,3 @@
-from datetime import datetime
-from pathlib import Path
-
 from kivy.lang import Builder
 from kivy.core.window import Window
 from kivymd.app import MDApp
@@ -8,8 +5,10 @@ from kivymd.app import MDApp
 Window.size = (1000, 680)
 
 KV = '''
+#:import dp kivy.metrics.dp
+
 MDScreen:
-    md_bg_color: 0.96, 0.96, 0.98, 1
+    md_bg_color: 0.988, 0.973, 1, 1
 
     MDBoxLayout:
         orientation: "vertical"
@@ -18,153 +17,182 @@ MDScreen:
             title: "NEXA"
             left_action_items: [["menu", lambda x: app.open_menu()]]
             right_action_items: [["help-circle-outline", lambda x: app.show_help()]]
-            md_bg_color: 0.24, 0.18, 0.45, 1
+            md_bg_color: 0.388, 0.055, 0.831, 1
             specific_text_color: 1, 1, 1, 1
-            elevation: 1
+            elevation: 0
 
         MDBoxLayout:
-            padding: "28dp"
-            spacing: "18dp"
             orientation: "vertical"
+            padding: dp(28)
+            spacing: dp(18)
 
             MDLabel:
                 text: "NEXA — Plataforma de Gestão para Clínicas"
-                font_style: "H5"
+                font_size: "24sp"
                 bold: True
                 theme_text_color: "Primary"
-                halign: "center"
+                halign: "left"
                 size_hint_y: None
                 height: self.texture_size[1]
 
             MDLabel:
                 text: "Um ecossistema modular para atendimento, faturamento e gestão."
                 theme_text_color: "Secondary"
-                halign: "center"
+                halign: "left"
                 size_hint_y: None
                 height: self.texture_size[1]
 
             MDGridLayout:
                 cols: 2
-                spacing: "16dp"
+                spacing: dp(16)
                 size_hint_y: None
-                height: "150dp"
+                height: dp(260)
 
                 MDCard:
-                    radius: [12, 12, 12, 12]
-                    elevation: 1
-                    padding: "16dp"
+                    radius: [16, 16, 16, 16]
+                    elevation: 0
+                    padding: dp(18)
+                    md_bg_color: 1, 1, 1, 1
                     orientation: "vertical"
                     MDLabel:
-                        text: "🩺 INSTRUA"
+                        text: "INSTRUA"
                         bold: True
+                        font_size: "18sp"
                         theme_text_color: "Primary"
                     MDLabel:
                         text: "Agenda, pacientes, confirmações e instruções."
                         theme_text_color: "Secondary"
+                    Widget:
                     MDRaisedButton:
                         text: "ABRIR INSTRUA"
+                        md_bg_color: 0.388, 0.055, 0.831, 1
                         on_release: app.open_module("Instrua")
 
                 MDCard:
-                    radius: [12, 12, 12, 12]
-                    elevation: 1
-                    padding: "16dp"
+                    radius: [16, 16, 16, 16]
+                    elevation: 0
+                    padding: dp(18)
+                    md_bg_color: 1, 1, 1, 1
                     orientation: "vertical"
                     MDLabel:
-                        text: "💰 NEXA BILL"
+                        text: "NEXA BILL"
                         bold: True
+                        font_size: "18sp"
                         theme_text_color: "Primary"
                     MDLabel:
                         text: "Faturamento, lotes, guias e protocolos."
                         theme_text_color: "Secondary"
+                    Widget:
                     MDRaisedButton:
                         text: "ABRIR FATURAMENTO"
+                        md_bg_color: 0.388, 0.055, 0.831, 1
                         on_release: app.open_module("Nexa Bill")
 
                 MDCard:
-                    radius: [12, 12, 12, 12]
-                    elevation: 1
-                    padding: "16dp"
+                    radius: [16, 16, 16, 16]
+                    elevation: 0
+                    padding: dp(18)
+                    md_bg_color: 1, 1, 1, 1
                     orientation: "vertical"
                     MDLabel:
-                        text: "📊 NEXA ADMIN"
+                        text: "NEXA ADMIN"
                         bold: True
+                        font_size: "18sp"
                         theme_text_color: "Primary"
                     MDLabel:
                         text: "Gestão, relatórios e administração."
                         theme_text_color: "Secondary"
+                    Widget:
                     MDRaisedButton:
                         text: "ABRIR GESTÃO"
+                        md_bg_color: 0.388, 0.055, 0.831, 1
                         on_release: app.open_module("Nexa Admin")
 
                 MDCard:
-                    radius: [12, 12, 12, 12]
-                    elevation: 1
-                    padding: "16dp"
+                    radius: [16, 16, 16, 16]
+                    elevation: 0
+                    padding: dp(18)
+                    md_bg_color: 1, 1, 1, 1
                     orientation: "vertical"
                     MDLabel:
-                        text: "🔍 CENTRAL"
+                        text: "CENTRAL"
                         bold: True
+                        font_size: "18sp"
                         theme_text_color: "Primary"
                     MDLabel:
                         text: "Pesquisa e visão unificada dos dados."
                         theme_text_color: "Secondary"
+                    Widget:
                     MDRaisedButton:
                         text: "PESQUISAR"
+                        md_bg_color: 0.388, 0.055, 0.831, 1
                         on_release: app.open_module("Central")
 
             MDCard:
-                radius: [12, 12, 12, 12]
-                elevation: 1
-                padding: "16dp"
+                radius: [16, 16, 16, 16]
+                elevation: 0
+                padding: dp(20)
+                md_bg_color: 1, 1, 1, 1
                 orientation: "vertical"
-                size_hint_y: None
-                height: "150dp"
+                size_hint_y: 1
 
                 MDLabel:
                     text: "VISÃO DA PLATAFORMA"
                     bold: True
+                    font_size: "18sp"
                     theme_text_color: "Primary"
                     size_hint_y: None
                     height: self.texture_size[1]
 
                 MDBoxLayout:
-                    spacing: "12dp"
+                    spacing: dp(12)
+                    padding: dp(8), dp(12)
+
                     MDLabel:
-                        text: "Produto\nNEXA"
+                        text: "NEXA\\nPlataforma"
                         halign: "center"
                         theme_text_color: "Secondary"
                     MDLabel:
-                        text: "Módulo clínico\nInstrua"
+                        text: "Instrua\\nClínico"
                         halign: "center"
                         theme_text_color: "Secondary"
                     MDLabel:
-                        text: "Módulo de faturamento\nNexa Bill"
+                        text: "Nexa Bill\\nFaturamento"
                         halign: "center"
                         theme_text_color: "Secondary"
                     MDLabel:
-                        text: "Módulo administrativo\nNexa Admin"
+                        text: "Nexa Admin\\nGestão"
                         halign: "center"
                         theme_text_color: "Secondary"
 
     MDNavigationDrawer:
         id: nav
         radius: [0, 0, 0, 0]
+        md_bg_color: 0.988, 0.973, 1, 1
+
         MDBoxLayout:
             orientation: "vertical"
-            padding: "20dp"
-            spacing: "8dp"
+            padding: dp(22)
+            spacing: dp(8)
+
             MDLabel:
                 text: "NEXA"
-                font_style: "H4"
+                font_size: "28sp"
                 bold: True
+                theme_text_color: "Primary"
                 size_hint_y: None
                 height: self.texture_size[1]
+
             MDLabel:
                 text: "Plataforma de gestão para clínicas"
                 theme_text_color: "Secondary"
                 size_hint_y: None
                 height: self.texture_size[1]
+
+            Widget:
+                size_hint_y: None
+                height: dp(10)
+
             OneLineListItem:
                 text: "Instrua"
                 on_release: app.open_module("Instrua")
