@@ -27,7 +27,7 @@
                 NexaCard:
                     orientation: "vertical"
                     size_hint_y: None
-                    height: dp(250) if self.width < dp(600) else dp(210)
+                    height: dp(285) if self.width < dp(600) else dp(240)
 
                     MDTextField:
                         id: patient_input
@@ -41,10 +41,19 @@
                         mode: "rectangle"
                         size_hint_x: 1
 
-                    NexaButton:
-                        text: "AGENDAR"
-                        size_hint_x: 1
-                        on_release: root.add_appointment()
+                    MDBoxLayout:
+                        adaptive_height: True
+                        spacing: dp(8)
+
+                        NexaButton:
+                            text: "AGENDAR"
+                            size_hint_x: 1
+                            on_release: root.add_appointment()
+
+                        NexaButton:
+                            text: "EXCLUIR ÚLTIMO"
+                            size_hint_x: 1
+                            on_release: root.delete_latest()
 
                     MDLabel:
                         id: appointment_status
