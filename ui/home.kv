@@ -1,150 +1,162 @@
-<HomeScreen>:
+#:import dp kivy.metrics.dp
+
+<QuickCard@MDCard>:
+    size_hint_y: None
+    height: dp(118)
+    radius: [18, 18, 18, 18]
+    elevation: 2
+    md_bg_color: app.card_color
+    padding: dp(14)
+
+MDScreen:
+    name: "home"
     md_bg_color: app.bg_color
 
     MDBoxLayout:
         orientation: "vertical"
 
         MDTopAppBar:
-            title: "🦊  NEXA   |   Automação e análise de dados para o seu negócio"
+            title: "NEXA"
             left_action_items: [["menu", lambda x: app.open_menu()]]
-            right_action_items: [["theme-light-dark", lambda x: app.toggle_theme()], ["help-circle-outline", lambda x: app.show_help()]]
+            right_action_items: [["theme-light-dark", lambda x: app.toggle_theme()]]
             md_bg_color: app.surface_color
-            specific_text_color: 1, 0.90, 1, 1
-            elevation: 0
+            specific_text_color: app.text_color
 
-        MDScrollView:
-            do_scroll_x: False
-
+        ScrollView:
             MDBoxLayout:
                 orientation: "vertical"
-                padding: dp(18) if self.width < dp(700) else dp(30)
-                spacing: dp(16)
-                size_hint_y: None
-                height: self.minimum_height
+                adaptive_height: True
+                padding: dp(18)
+                spacing: dp(14)
 
                 MDLabel:
-                    text: "NEXA"
-                    font_size: "38sp" if self.width < dp(700) else "46sp"
+                    text: "Seu ecossistema em um só lugar"
+                    font_style: "H4"
                     bold: True
                     theme_text_color: "Custom"
-                    text_color: 0.62, 0.22, 0.85, 1
+                    text_color: app.text_color
                     size_hint_y: None
                     height: self.texture_size[1]
 
                 MDLabel:
-                    text: "Automação e análise de dados para o seu negócio"
-                    font_size: "15sp"
+                    text: "Acesse seus aplicativos, acompanhe a operação e deixe o NEXA cuidar do trabalho repetitivo."
                     theme_text_color: "Custom"
                     text_color: app.muted_color
-                    text_size: self.width, None
                     size_hint_y: None
                     height: self.texture_size[1]
 
-                MDBoxLayout:
+                MDGridLayout:
+                    cols: 2 if self.width > dp(640) else 1
                     adaptive_height: True
-                    spacing: dp(8)
-                    ScrollView:
-                        do_scroll_y: False
+                    spacing: dp(12)
+
+                    QuickCard:
+                        on_release: app.open_module("Instrua")
                         MDBoxLayout:
-                            adaptive_width: True
-                            spacing: dp(7)
-                            NexaChip:
-                                text: "Vendas"
-                            NexaChip:
-                                text: "Serviços"
-                            NexaChip:
-                                text: "Financeiro"
-                            NexaChip:
-                                text: "Estoque"
-                            NexaChip:
-                                text: "Clientes"
-                            NexaChip:
-                                text: "Faturamento"
-                            NexaChip:
-                                text: "Relatórios"
+                            orientation: "vertical"
+                            spacing: dp(5)
+                            MDLabel:
+                                text: "✦  INSTRUA"
+                                bold: True
+                                theme_text_color: "Custom"
+                                text_color: 0.95, 0.55, 1, 1
+                            MDLabel:
+                                text: "Jornada do cliente, agenda, confirmações e instruções."
+                                theme_text_color: "Custom"
+                                text_color: app.muted_color
+                            MDLabel:
+                                text: "Abrir aplicativo  →"
+                                theme_text_color: "Custom"
+                                text_color: app.text_color
+
+                    QuickCard:
+                        on_release: app.open_module("Nexa Bill")
+                        MDBoxLayout:
+                            orientation: "vertical"
+                            spacing: dp(5)
+                            MDLabel:
+                                text: "▣  NEXA BILL"
+                                bold: True
+                                theme_text_color: "Custom"
+                                text_color: 0.98, 0.78, 0.45, 1
+                            MDLabel:
+                                text: "Faturamento, lotes, protocolos, conferência e relatórios."
+                                theme_text_color: "Custom"
+                                text_color: app.muted_color
+                            MDLabel:
+                                text: "Abrir aplicativo  →"
+                                theme_text_color: "Custom"
+                                text_color: app.text_color
+
+                    QuickCard:
+                        MDBoxLayout:
+                            orientation: "vertical"
+                            spacing: dp(5)
+                            MDLabel:
+                                text: "◈  NEXA AI"
+                                bold: True
+                                theme_text_color: "Custom"
+                                text_color: 0.45, 0.78, 1, 1
+                            MDLabel:
+                                text: "Assistente para consultar dados e preparar tarefas."
+                                theme_text_color: "Custom"
+                                text_color: app.muted_color
+                            MDLabel:
+                                text: "Em preparação"
+                                theme_text_color: "Custom"
+                                text_color: app.muted_color
+
+                    QuickCard:
+                        MDBoxLayout:
+                            orientation: "vertical"
+                            spacing: dp(5)
+                            MDLabel:
+                                text: "⌘  AUTOMATION"
+                                bold: True
+                                theme_text_color: "Custom"
+                                text_color: 0.7, 0.6, 1, 1
+                            MDLabel:
+                                text: "Ações automáticas para notificações e rotinas repetitivas."
+                                theme_text_color: "Custom"
+                                text_color: app.muted_color
+                            MDLabel:
+                                text: "Base do ecossistema"
+                                theme_text_color: "Custom"
+                                text_color: app.muted_color
+
+                MDLabel:
+                    text: "Resumo da operação"
+                    font_style: "H6"
+                    bold: True
+                    theme_text_color: "Custom"
+                    text_color: app.text_color
+                    size_hint_y: None
+                    height: self.texture_size[1]
 
                 MDGridLayout:
-                    cols: 1 if self.width < dp(700) else 2
-                    spacing: dp(14)
+                    cols: 3 if self.width > dp(720) else 1
+                    adaptive_height: True
+                    spacing: dp(10)
+
+                    QuickCard:
+                        height: dp(96)
+                        MDLabel:
+                            text: "Identidade\nConta NEXA"
+                            theme_text_color: "Custom"
+                            text_color: app.text_color
+                    QuickCard:
+                        height: dp(96)
+                        MDLabel:
+                            text: "Organizações\nAcesso por empresa"
+                            theme_text_color: "Custom"
+                            text_color: app.text_color
+                    QuickCard:
+                        height: dp(96)
+                        MDLabel:
+                            text: "Entitlements\nPlano e recursos"
+                            theme_text_color: "Custom"
+                            text_color: app.text_color
+
+                Widget:
                     size_hint_y: None
-                    height: self.minimum_height
-                    row_default_height: dp(205)
-                    row_force_default: True
-
-                    NexaCard:
-                        orientation: "vertical"
-                        MDLabel:
-                            text: "🦊  NEXA"
-                            font_size: "22sp"
-                            bold: True
-                            theme_text_color: "Custom"
-                            text_color: 1, 0.75, 1, 1
-                        MDLabel:
-                            text: "Bem-vinda!\\nAutomatize seus dados, gere relatórios e transforme informação em decisões."
-                            theme_text_color: "Custom"
-                            text_color: 0.78, 0.72, 0.86, 1
-                            text_size: self.width, None
-                        Widget:
-                        NexaButton:
-                            text: "PROCESSAR DADOS"
-                            on_release: app.toast("Módulo de processamento aberto.")
-
-                    NexaCard:
-                        orientation: "vertical"
-                        MDLabel:
-                            text: "NEXA BILL"
-                            font_size: "22sp"
-                            bold: True
-                            theme_text_color: "Custom"
-                            text_color: 0.92, 0.70, 1, 1
-                        MDLabel:
-                            text: "Faturamento, lotes, guias, protocolos e relatórios."
-                            theme_text_color: "Custom"
-                            text_color: 0.78, 0.72, 0.86, 1
-                            text_size: self.width, None
-                        Widget:
-                        NexaButton:
-                            text: "ABRIR FATURAMENTO"
-                            on_release: app.open_module("Nexa Bill")
-
-                    NexaCard:
-                        orientation: "vertical"
-                        MDLabel:
-                            text: "INSTRUA"
-                            font_size: "22sp"
-                            bold: True
-                            theme_text_color: "Custom"
-                            text_color: 0.92, 0.70, 1, 1
-                        MDLabel:
-                            text: "Agenda, clientes, serviços, confirmações e instruções."
-                            theme_text_color: "Custom"
-                            text_color: 0.78, 0.72, 0.86, 1
-                            text_size: self.width, None
-                        Widget:
-                        NexaButton:
-                            text: "ABRIR INSTRUA"
-                            on_release: app.open_module("Instrua")
-
-                    NexaCard:
-                        orientation: "vertical"
-                        MDLabel:
-                            text: "ADMIN + CENTRAL"
-                            font_size: "22sp"
-                            bold: True
-                            theme_text_color: "Custom"
-                            text_color: 0.92, 0.70, 1, 1
-                        MDLabel:
-                            text: "Gestão, pesquisa e visão unificada."
-                            theme_text_color: "Custom"
-                            text_color: 0.78, 0.72, 0.86, 1
-                            text_size: self.width, None
-                        Widget:
-                        MDBoxLayout:
-                            adaptive_height: True
-                            spacing: dp(8)
-                            NexaButton:
-                                text: "ADMIN"
-                                on_release: app.open_module("Nexa Admin")
-                            NexaButton:
-                                text: "CENTRAL"
-                                on_release: app.open_module("Central")
+                    height: dp(12)
