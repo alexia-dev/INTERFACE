@@ -30,7 +30,6 @@ class NEXA(MDApp):
         root_dir = Path(__file__).resolve().parent
         for filename in (
             "theme.kv",
-            "app.kv",
             "home.kv",
             "instrua.kv",
             "bill.kv",
