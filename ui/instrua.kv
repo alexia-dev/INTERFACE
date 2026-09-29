@@ -1,0 +1,53 @@
+<InstruaScreen>:
+    md_bg_color: 0.988, 0.973, 1, 1
+
+    MDBoxLayout:
+        orientation: "vertical"
+
+        MDTopAppBar:
+            title: "NEXA / INSTRUA"
+            left_action_items: [["arrow-left", lambda x: app.go_home()]]
+            md_bg_color: 0.388, 0.055, 0.831, 1
+            specific_text_color: 1, 1, 1, 1
+
+        MDScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                padding: "24dp"
+                spacing: "14dp"
+                size_hint_y: None
+                height: self.minimum_height
+
+                NexaTitle:
+                    text: "Agenda e atendimento"
+
+                NexaCard:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: "210dp"
+                    MDTextField:
+                        id: patient_input
+                        hint_text: "Nome do paciente"
+                        mode: "rectangle"
+                    MDTextField:
+                        id: appointment_input
+                        hint_text: "Consulta / procedimento"
+                        mode: "rectangle"
+                    NexaButton:
+                        text: "AGENDAR"
+                        on_release: root.add_appointment()
+                    MDLabel:
+                        id: appointment_status
+                        text: "Nenhum novo agendamento."
+                        theme_text_color: "Secondary"
+
+                NexaSection:
+                    text: "Próximos atendimentos"
+
+                NexaCard:
+                    size_hint_y: None
+                    height: "170dp"
+                    MDLabel:
+                        id: recent_list
+                        text: "Carregando..."
+                        theme_text_color: "Secondary"
