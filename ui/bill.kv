@@ -27,7 +27,7 @@
                 NexaCard:
                     orientation: "vertical"
                     size_hint_y: None
-                    height: dp(250) if self.width < dp(600) else dp(210)
+                    height: dp(285) if self.width < dp(600) else dp(240)
 
                     MDTextField:
                         id: bill_patient
@@ -42,10 +42,19 @@
                         input_type: "number"
                         size_hint_x: 1
 
-                    NexaButton:
-                        text: "LANÇAR FATURAMENTO"
-                        size_hint_x: 1
-                        on_release: root.add_bill()
+                    MDBoxLayout:
+                        adaptive_height: True
+                        spacing: dp(8)
+
+                        NexaButton:
+                            text: "LANÇAR"
+                            size_hint_x: 1
+                            on_release: root.add_bill()
+
+                        NexaButton:
+                            text: "EXCLUIR ÚLTIMO"
+                            size_hint_x: 1
+                            on_release: root.delete_latest()
 
                     MDLabel:
                         id: bill_status
