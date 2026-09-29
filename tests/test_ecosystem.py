@@ -5,7 +5,14 @@ from core.models import AppEntitlement, AppDefinition, Organization
 def test_ecosystem_models_parse():
     org = Organization.from_dict({"id": "1", "name": "Example", "type": "SERVICES"})
     entitlement = AppEntitlement.from_dict({"appId": "instrua", "plan": "PREMIUM"})
-    app = AppDefinition.from_dict({"id": "instrua", "name": "Instrua", "description": "Atendimento", "installed": True})
+    app = AppDefinition.from_dict(
+        {
+            "id": "instrua",
+            "name": "Instrua",
+            "description": "Atendimento",
+            "installed": True,
+        }
+    )
 
     assert org.id == "1"
     assert org.organization_type == "SERVICES"
