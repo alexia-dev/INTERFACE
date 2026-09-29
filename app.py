@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty
 from kivymd.app import MDApp
@@ -8,7 +9,6 @@ from core.database import Database
 from repositories.appointments import AppointmentRepository
 from repositories.billing import BillingRepository
 from screens.admin import AdminScreen
-from screens.base import NexaScreen
 from screens.bill import BillScreen
 from screens.central import CentralScreen
 from screens.home import HomeScreen
@@ -24,6 +24,9 @@ class NEXA(MDApp):
         self.theme_cls.primary_palette = "DeepPurple"
         self.theme_cls.theme_style = "Light"
         self.title = "NEXA"
+
+        # Keep the Android keyboard from covering the active form field.
+        Window.softinput_mode = "resize"
 
         # Kivy provides a writable per-app directory on each target platform.
         self.database = Database(Path(self.user_data_dir) / "nexa.db")
@@ -42,7 +45,27 @@ class NEXA(MDApp):
         ):
             Builder.load_file(str(root / "ui" / filename))
 
+        screen_manager = self._build_screens()
+        self._configure_mobile_window()
+        return screen_manager
+
+    def _build_screens(self):
+        screen_manager = self.root.ids.screen_manager
+        screens = (
+            (HomeScreen, "home"),
+            (InstruaScreen, "instrua"),
+            (BillScreen, "bill"),
+            (AdminScreen, "admin"),
+            (CentralScreen, "central"),
+        )
+        for screen_class, name in screens:
+            screen_manager.add_widget(screen_class(name=name))
         return self.root
+
+    def _configure_mobile_window(self):
+        # Portrait is the primary Android layout; desktop remains resizable.
+        if Window.width < 700:
+            Window.fullscreen = False
 
     def open_menu(self):
         self.root.ids.nav.set_state("open")
