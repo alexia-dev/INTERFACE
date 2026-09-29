@@ -1,20 +1,31 @@
 #:import dp kivy.metrics.dp
 
 <NexaCard@MDCard>:
-    radius: [16, 16, 16, 16]
+    radius: [dp(18), dp(18), dp(18), dp(18)]
     elevation: 0
-    md_bg_color: 1, 1, 1, 1
     padding: dp(18)
+    md_bg_color: 0.08, 0.04, 0.16, 0.92
+    line_color: 0.55, 0.20, 0.85, 0.30
+    line_width: dp(1)
 
 <NexaTitle@MDLabel>:
     bold: True
-    font_size: "22sp"
-    theme_text_color: "Primary"
+    font_size: "24sp"
+    theme_text_color: "Custom"
+    text_color: 0.98, 0.94, 1, 1
 
 <NexaSection@MDLabel>:
     bold: True
-    font_size: "18sp"
-    theme_text_color: "Primary"
+    font_size: "16sp"
+    theme_text_color: "Custom"
+    text_color: 0.92, 0.70, 1, 1
 
 <NexaButton@MDRaisedButton>:
-    md_bg_color: 0.388, 0.055, 0.831, 1
+    md_bg_color: 0.42, 0.16, 0.95, 1
+    text_color: 1, 1, 1, 1
+    radius: [dp(12), dp(12), dp(12), dp(12)]
+    elevation: 2
+
+<NexaChip@MDFlatButton>:
+    theme_text_color: "Custom"
+    text_color: 0.95, 0.82, 1, 1
