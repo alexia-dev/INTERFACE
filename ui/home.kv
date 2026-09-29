@@ -1,5 +1,5 @@
 <HomeScreen>:
-    md_bg_color: 0.035, 0.018, 0.075, 1
+    md_bg_color: app.bg_color
 
     MDBoxLayout:
         orientation: "vertical"
@@ -7,8 +7,8 @@
         MDTopAppBar:
             title: "🦊  NEXA   |   Automação e análise de dados para o seu negócio"
             left_action_items: [["menu", lambda x: app.open_menu()]]
-            right_action_items: [["help-circle-outline", lambda x: app.show_help()]]
-            md_bg_color: 0.06, 0.025, 0.12, 0.96
+            right_action_items: [["theme-light-dark", lambda x: app.toggle_theme()], ["help-circle-outline", lambda x: app.show_help()]]
+            md_bg_color: app.surface_color
             specific_text_color: 1, 0.90, 1, 1
             elevation: 0
 
@@ -27,7 +27,7 @@
                     font_size: "38sp" if self.width < dp(700) else "46sp"
                     bold: True
                     theme_text_color: "Custom"
-                    text_color: 0.98, 0.72, 1, 1
+                    text_color: 0.62, 0.22, 0.85, 1
                     size_hint_y: None
                     height: self.texture_size[1]
 
@@ -35,7 +35,7 @@
                     text: "Automação e análise de dados para o seu negócio"
                     font_size: "15sp"
                     theme_text_color: "Custom"
-                    text_color: 0.78, 0.70, 0.86, 1
+                    text_color: app.muted_color
                     text_size: self.width, None
                     size_hint_y: None
                     height: self.texture_size[1]
