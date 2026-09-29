@@ -3,6 +3,7 @@ from pathlib import Path
 from kivy.core.window import Window
 from kivy.lang import Builder
 from kivymd.app import MDApp
+from kivy.properties import ListProperty
 from kivymd.uix.snackbar import Snackbar
 
 from core.api_client import ApiClient
@@ -18,9 +19,15 @@ from screens.instrua import InstruaScreen
 
 
 class NEXA(MDApp):
+    bg_color = ListProperty([0.035, 0.018, 0.075, 1])
+    surface_color = ListProperty([0.055, 0.025, 0.11, 0.98])
+    card_color = ListProperty([0.08, 0.04, 0.16, 0.92])
+    text_color = ListProperty([0.98, 0.94, 1, 1])
+    muted_color = ListProperty([0.72, 0.65, 0.80, 1])
+    is_dark = True
     def build(self):
         self.theme_cls.primary_palette = "DeepPurple"
-        self.theme_cls.theme_style = "Light"
+        self.theme_cls.theme_style = "Dark"
         self.title = "NEXA"
         Window.softinput_mode = "resize"
 
@@ -59,6 +66,22 @@ class NEXA(MDApp):
         )
         for screen_class, name in screens:
             screen_manager.add_widget(screen_class(name=name))
+
+    def toggle_theme(self):
+        self.is_dark = not self.is_dark
+        self.theme_cls.theme_style = "Dark" if self.is_dark else "Light"
+        if self.is_dark:
+            self.bg_color = [0.035, 0.018, 0.075, 1]
+            self.surface_color = [0.055, 0.025, 0.11, 0.98]
+            self.card_color = [0.08, 0.04, 0.16, 0.92]
+            self.text_color = [0.98, 0.94, 1, 1]
+            self.muted_color = [0.72, 0.65, 0.80, 1]
+        else:
+            self.bg_color = [0.97, 0.95, 0.99, 1]
+            self.surface_color = [1, 1, 1, 0.98]
+            self.card_color = [1, 1, 1, 1]
+            self.text_color = [0.16, 0.08, 0.22, 1]
+            self.muted_color = [0.38, 0.31, 0.45, 1]
 
     def configure_api(self, base_url: str) -> None:
         self.api.configure(base_url)
