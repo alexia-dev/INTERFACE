@@ -1,0 +1,74 @@
+#:import dp kivy.metrics.dp
+
+MDScreen:
+    md_bg_color: 0.988, 0.973, 1, 1
+
+    MDNavigationLayout:
+        MDScreenManager:
+            id: screen_manager
+
+            HomeScreen:
+                name: "home"
+
+            InstruaScreen:
+                name: "instrua"
+
+            BillScreen:
+                name: "bill"
+
+            AdminScreen:
+                name: "admin"
+
+            CentralScreen:
+                name: "central"
+
+        MDNavigationDrawer:
+            id: nav
+            drawer_type: "modal"
+            radius: [0, dp(16), dp(16), 0]
+            md_bg_color: 0.988, 0.973, 1, 1
+
+            MDBoxLayout:
+                orientation: "vertical"
+                padding: dp(22)
+                spacing: dp(8)
+
+                MDLabel:
+                    text: "NEXA"
+                    font_size: "28sp"
+                    bold: True
+                    theme_text_color: "Primary"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDLabel:
+                    text: "Plataforma de gestão para clínicas"
+                    theme_text_color: "Secondary"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                Widget:
+
+                OneLineListItem:
+                    text: "Início"
+                    on_release: app.go_home()
+
+                OneLineListItem:
+                    text: "Instrua"
+                    on_release: app.open_module("Instrua")
+
+                OneLineListItem:
+                    text: "Nexa Bill"
+                    on_release: app.open_module("Nexa Bill")
+
+                OneLineListItem:
+                    text: "Nexa Admin"
+                    on_release: app.open_module("Nexa Admin")
+
+                OneLineListItem:
+                    text: "Central"
+                    on_release: app.open_module("Central")
+
+                OneLineListItem:
+                    text: "Ajuda"
+                    on_release: app.show_help()
