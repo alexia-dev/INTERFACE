@@ -8,9 +8,15 @@ def test_local_data_persists(tmp_path):
     appointments = AppointmentRepository(database)
     billing = BillingRepository(database)
 
-    appointments.create("Paciente Teste", "Consulta")
-    billing.create("Paciente Teste", 35000)
+    appointment_id = appointments.create("Paciente Teste", "Consulta")
+    billing_id = billing.create("Paciente Teste", 35000)
 
     reopened = Database(tmp_path / "nexa.db")
-    assert AppointmentRepository(reopened).recent()[0]["patient_name"] == "Paciente Teste"
-    assert BillingRepository(reopened).recent()[0]["value_cents"] == 35000
+    assert AppointmentRepository(reopened).recent()[0]["id"] == appointment_id
+    assert BillingRepository(reopened).recent()[0]["id"] == billing_id
+
+    AppointmentRepository(reopened).delete(appointment_id)
+    BillingRepository(reopened).delete(billing_id)
+
+    assert AppointmentRepository(reopened).recent() == []
+    assert BillingRepository(reopened).recent() == []
