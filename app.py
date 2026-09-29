@@ -5,7 +5,9 @@ from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivymd.uix.snackbar import Snackbar
 
+from core.api_client import ApiClient
 from core.database import Database
+from core.session import Session
 from repositories.appointments import AppointmentRepository
 from repositories.billing import BillingRepository
 from screens.admin import AdminScreen
@@ -22,9 +24,13 @@ class NEXA(MDApp):
         self.title = "NEXA"
         Window.softinput_mode = "resize"
 
+        # The local DB remains a cache/compatibility layer for now.
         self.database = Database(Path(self.user_data_dir) / "nexa.db")
         self.appointments = AppointmentRepository(self.database)
         self.billing = BillingRepository(self.database)
+
+        self.api = ApiClient()
+        self.session = Session()
 
         root_dir = Path(__file__).resolve().parent
         for filename in (
@@ -53,6 +59,17 @@ class NEXA(MDApp):
         )
         for screen_class, name in screens:
             screen_manager.add_widget(screen_class(name=name))
+
+    def configure_api(self, base_url: str) -> None:
+        self.api.configure(base_url)
+
+    def apply_login(self, auth_response: dict) -> None:
+        self.session.apply_auth_response(auth_response)
+
+    def logout(self) -> None:
+        self.api.clear_session()
+        self.session.clear()
+        self.go_home()
 
     def open_menu(self):
         self.root.ids.nav.set_state("open")
