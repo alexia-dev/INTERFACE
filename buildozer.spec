@@ -13,7 +13,12 @@ orientation = portrait
 fullscreen = 0
 
 # Python-for-Android dependencies
-requirements = python3,kivy==2.3.0,kivymd==1.2.0
+# Pin Python 3.12 to avoid the current Python 3.14/API 23
+# preadv/pwritev compilation failure in the Docker toolchain.
+requirements = python3==3.12.10,kivy==2.3.0,kivymd==1.2.0
+
+# Use the stable p4a branch compatible with Python 3.12.
+p4a.branch = master
 
 # Android
 android.archs = arm64-v8a
