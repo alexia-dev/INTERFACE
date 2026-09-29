@@ -1,115 +1,86 @@
 # NEXA — Plataforma de Gestão para Clínicas
 
-O **NEXA** é a plataforma principal para organizar módulos independentes da operação clínica, mantendo atendimento, faturamento e administração separados por domínio.
+O NEXA é a plataforma principal para organizar atendimento, faturamento, administração e pesquisa em módulos independentes.
 
-## Estrutura do produto
+## Arquitetura do app
 
-- **Instrua** — jornada clínica: agenda, pacientes, consultas, confirmações, check-in, instruções e notificações.
-- **Nexa Bill** — faturamento: guias, lotes, protocolos, conferência, valores, importação e relatórios.
-- **Nexa Admin** — administração: usuários, perfis, configurações, auditoria e indicadores.
-- **Central** — busca e visão unificada, respeitando permissões e o contexto da clínica.
-
-O módulo de faturamento do NEXA utiliza a identidade **Nexa Bill**. O faturamento continua separado do fluxo clínico para manter a experiência simples e permitir evolução independente.
-
-## Arquitetura-alvo
-
-A primeira etapa será um **monólito modular** com API central e banco PostgreSQL multi-tenant:
+O frontend usa Kivy + KivyMD com uma separação simples para facilitar alterações:
 
 ```text
-Android / Windows / Web
-          ↓
-       NEXA API
-          ↓
-      PostgreSQL
-          ↓
-   módulos do NEXA
+NEXA/
+├── main.py                 # entrada mínima
+├── app.py                  # composição, navegação e inicialização
+├── ui/                     # aparência e layout
+│   ├── theme.kv            # tokens e componentes visuais
+│   ├── app.kv              # shell + menu lateral
+│   ├── home.kv             # dashboard
+│   ├── instrua.kv          # tela Instrua
+│   ├── bill.kv             # tela Nexa Bill
+│   ├── admin.kv            # tela Nexa Admin
+│   └── central.kv          # tela Central
+├── screens/                # comportamento de cada tela
+├── repositories/           # acesso aos dados
+├── core/                   # infraestrutura, incluindo SQLite
+└── tests/                  # testes
 ```
 
-A separação entre módulos será feita por domínio dentro do mesmo backend. Microserviços ficam como possibilidade futura, não como requisito do MVP.
+### Regra para manutenção
 
-## Multi-tenant e segurança
+**Visual:** altere somente o `.kv` da tela.
 
-Toda entidade pertencente a uma clínica deverá carregar o contexto do tenant. A API deve aplicar esse contexto em todas as consultas e comandos.
+**Comportamento:** altere o arquivo correspondente em `screens/`.
 
-Perfis planejados:
+**Dados:** altere o repositório em `repositories/`.
 
-- PLATFORM_ADMIN
-- COMPANY_OWNER
-- COMPANY_ADMIN
-- RECEPTION
-- CLINICAL
-- BILLING
-- PATIENT
+**Infraestrutura:** altere `core/`.
 
-Antes de dados reais, o projeto deverá ter autenticação, autorização por papel, trilha de auditoria, backups e proteção de documentos.
+**Entrada do app:** `main.py` quase nunca precisa mudar.
 
-## Estado atual
+Essa separação também deixa preparada uma futura troca de SQLite por API/backend sem precisar reescrever as telas.
 
-- 📱 workflow Android configurado;
-- 💻 workflow Windows configurado;
-- 🧪 CI e testes básicos;
-- 🧩 shell inicial modular;
-- 🔒 política de não usar dados reais no repositório público.
+## Mobile-first
 
-> Os workflows ainda precisam ser validados em execução real. A existência do YAML não significa que o APK/EXE já foi comprovadamente gerado com sucesso.
+O layout foi adaptado para celular sem criar uma segunda versão da interface. A mesma tela reorganiza os elementos conforme a largura disponível: o dashboard passa de duas colunas para uma, formulários ocupam a largura da tela e as áreas longas usam rolagem vertical.
 
-## Próximas etapas
+O app não fixa mais uma janela desktop de `1000x680`. A interface usa `size_hint`, `dp`, `minimum_height` e layouts adaptáveis para funcionar em diferentes tamanhos de tela. O Kivy documenta `size_hint` como a forma de distribuir espaço proporcionalmente entre widgets e recomenda `system_size` em cenários onde o tamanho da janela precisa ser definido programaticamente. O KivyMD também oferece componentes responsivos e propriedades adaptativas para esse tipo de interface.
 
-1. Estruturar o backend modular.
-2. Formalizar o modelo multi-tenant.
-3. Criar API REST documentada.
-4. Implementar autenticação e RBAC.
-5. Evoluir Instrua.
-6. Criar o domínio Nexa Bill.
-7. Adicionar auditoria e backups.
-8. Depois, importar Excel/PDF e implementar OCR com conferência humana.
-9. Mais adiante, adicionar cache/offline e sincronização.
+## Dados locais
 
-## Regras para documentos e dados
+O NEXA usa SQLite para persistência local inicial. O banco é criado no diretório gravável específico da aplicação por meio de `App.user_data_dir`.
 
-Nunca enviar ao GitHub:
+Tabelas atuais:
 
-- nomes reais de pacientes;
-- documentos pessoais;
-- informações clínicas;
-- protocolos reais;
-- planilhas reais;
-- tokens, senhas ou segredos.
+- `appointments`
+- `billings`
 
-Use dados fictícios ou anonimizados nos exemplos e testes.
+As operações ficam atrás de repositórios, portanto a UI não conhece SQL.
 
-## Estrutura sugerida
+## Módulos atuais
 
-```text
-nexa/
-├── modules/
-│   ├── instrua/
-│   ├── nexa_bill/
-│   ├── nexa_admin/
-│   └── central/
-├── core/
-│   ├── auth/
-│   ├── tenant/
-│   ├── audit/
-│   └── storage/
-├── tests/
-└── docs/
-```
+- **Instrua:** agenda e atendimento.
+- **Nexa Bill:** lançamentos de faturamento.
+- **Nexa Admin:** administração inicial.
+- **Central:** pesquisa unificada dos dados locais.
 
-## Build e CI/CD
+## Android e Windows
 
-- `.github/workflows/ci.yml` — sintaxe, testes e validações;
-- `.github/workflows/build-apk.yml` — Android;
-- `.github/workflows/build-windows.yml` — Windows.
+- `.github/workflows/build-apk.yml` — geração do APK Android.
+- `.github/workflows/build-windows.yml` — build para Windows.
+- `buildozer.spec` — configuração do app Android.
 
-O pipeline deve bloquear merges quando testes falharem.
+Os workflows precisam ser validados em execução real; a presença do YAML, sozinha, não comprova uma build bem-sucedida.
 
-## Interface
+## Segurança
 
-A interface do NEXA segue a linguagem visual migrada das telas antigas do projeto: estética clínica moderna, superfícies claras, lilás/violeta como acento, cartões com cantos arredondados e navegação modular.
+Antes de dados reais, o projeto ainda precisa de autenticação, autorização por papel, auditoria, backups, proteção de documentos e estratégia de sincronização.
 
-O nome e a identidade apresentados na interface são **NEXA**.
+Nunca enviar ao repositório público nomes reais de pacientes, documentos pessoais, informações clínicas, planilhas reais, tokens ou senhas.
 
-## Status
+## Próximo estágio
 
-🚧 Em desenvolvimento
+1. Login e RBAC.
+2. Cadastros persistentes completos.
+3. Expansão do Instrua.
+4. Guias, lotes e relatórios do Nexa Bill.
+5. Usuários, perfis e auditoria do Nexa Admin.
+6. API/backend e sincronização.
