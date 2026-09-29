@@ -37,7 +37,7 @@ jobs:
         shell: pwsh
         run: |
           python -m py_compile main.py app.py build.py
-          python -m py_compile core/*.py repositories/*.py screens/*.py
+          Get-ChildItem core, repositories, screens -Filter *.py -Recurse | ForEach-Object { python -m py_compile $_.FullName }
 
       - name: Rodar testes
         shell: pwsh
