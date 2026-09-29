@@ -1,5 +1,5 @@
 <InstruaScreen>:
-    md_bg_color: 0.035, 0.018, 0.075, 1
+    md_bg_color: app.bg_color
 
     MDBoxLayout:
         orientation: "vertical"
@@ -7,7 +7,8 @@
         MDTopAppBar:
             title: "INSTRUA   |   Gestão • Agendamentos • Instruções"
             left_action_items: [["arrow-left", lambda x: app.go_home()]]
-            md_bg_color: 0.06, 0.025, 0.12, 0.96
+            right_action_items: [["theme-light-dark", lambda x: app.toggle_theme()]]
+            md_bg_color: app.surface_color
             specific_text_color: 1, 0.90, 1, 1
 
         MDScrollView:
@@ -24,7 +25,7 @@
                     font_size: "30sp"
                     bold: True
                     theme_text_color: "Custom"
-                    text_color: 1, 0.75, 1, 1
+                    text_color: 0.62, 0.22, 0.85, 1
                     size_hint_y: None
                     height: self.texture_size[1]
 
@@ -67,8 +68,8 @@
                         id: patient_input
                         hint_text: "Selecionar cliente"
                         mode: "fill"
-                        fill_color_normal: 0.10, 0.06, 0.18, 1
-                        fill_color_focus: 0.13, 0.08, 0.24, 1
+                        fill_color_normal: app.surface_color
+                        fill_color_focus: app.card_color
                         text_color_normal: 1, 1, 1, 1
                         hint_text_color_normal: 0.62, 0.55, 0.72, 1
 
@@ -76,8 +77,8 @@
                         id: appointment_input
                         hint_text: "Serviço / procedimento"
                         mode: "fill"
-                        fill_color_normal: 0.10, 0.06, 0.18, 1
-                        fill_color_focus: 0.13, 0.08, 0.24, 1
+                        fill_color_normal: app.surface_color
+                        fill_color_focus: app.card_color
                         text_color_normal: 1, 1, 1, 1
                         hint_text_color_normal: 0.62, 0.55, 0.72, 1
 
@@ -95,7 +96,7 @@
                         id: appointment_status
                         text: "Nenhum novo agendamento."
                         theme_text_color: "Custom"
-                        text_color: 0.62, 0.55, 0.72, 1
+                        text_color: app.muted_color
                         text_size: self.width, None
 
                 NexaSection:
