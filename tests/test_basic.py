@@ -4,6 +4,7 @@ from pathlib import Path
 def test_nexa_source_exists():
     assert Path("main.py").exists()
     assert Path("app.py").exists()
+    assert Path("build.py").exists()
 
 
 def test_mobile_build_files_exist():
@@ -13,6 +14,7 @@ def test_mobile_build_files_exist():
 
 def test_windows_build_file_exists():
     assert Path(".github/workflows/build-windows.yml").exists()
+    assert Path("ui/theme.kv").exists()
 
 
 def test_modular_frontend_exists():
