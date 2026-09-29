@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from core.database import Database
 
@@ -8,7 +8,7 @@ class BillingRepository:
         self.database = database
 
     def create(self, patient_name: str, value_cents: int) -> int:
-        created_at = datetime.now().isoformat(timespec="seconds")
+        created_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
         return self.database.execute(
             """
             INSERT INTO billings(patient_name, value_cents, created_at)
@@ -28,3 +28,9 @@ class BillingRepository:
             (limit,),
         )
         return [dict(row) for row in rows]
+
+    def delete(self, billing_id: int) -> None:
+        self.database.execute(
+            "DELETE FROM billings WHERE id = ?",
+            (billing_id,),
+        )
