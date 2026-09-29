@@ -43,38 +43,50 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           python -m pip install "buildozer>=1.5.0" "cython<3.1"
 
+      - name: Verificar checkout e arquivos
+        run: |
+          pwd
+          test -f buildozer.spec
+          test -f main.py
+          find . -maxdepth 2 -type f | sort
+
       - name: Preparar SDK Android usado pelo Buildozer
         shell: bash
         run: |
-          set +e
-          buildozer -v android debug
-          BOOTSTRAP_EXIT=$?
           set -e
-
           export SDK_ROOT="$HOME/.buildozer/android/platform/android-sdk"
           echo "SDK_ROOT=$SDK_ROOT"
+
+          # Bootstrap somente o SDK sem deixar a tentativa de build matar o job.
+          set +e
+          buildozer android update
+          UPDATE_EXIT=$?
+          set -e
+          echo "buildozer android update exit: $UPDATE_EXIT"
 
           if [ -x "$SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" ]; then
             SDKMANAGER="$SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
           elif [ -x "$SDK_ROOT/tools/bin/sdkmanager" ]; then
             SDKMANAGER="$SDK_ROOT/tools/bin/sdkmanager"
           else
-            echo "sdkmanager não encontrado após o bootstrap do Buildozer."
+            echo "sdkmanager não encontrado em $SDK_ROOT"
+            find "$SDK_ROOT" -maxdepth 5 -name sdkmanager -type f -print || true
             exit 1
           fi
 
-          echo "Aceitando licenças Android..."
+          mkdir -p "$SDK_ROOT/licenses"
           yes | "$SDKMANAGER" --sdk_root="$SDK_ROOT" --licenses || true
 
-          echo "Instalando componentes Android necessários..."
-          yes | "$SDKMANAGER" --sdk_root="$SDK_ROOT" \
-            "platform-tools" \
-            "platforms;android-35" \
-            "build-tools;37.0.0"
+          "$SDKMANAGER" --sdk_root="$SDK_ROOT"             "platform-tools"             "platforms;android-35"             "build-tools;35.0.0"
 
+          test -x "$SDK_ROOT/build-tools/35.0.0/aidl"
+          "$SDK_ROOT/build-tools/35.0.0/aidl" --version || true
           "$SDKMANAGER" --sdk_root="$SDK_ROOT" --list_installed
 
-          echo "Bootstrap terminou com código $BOOTSTRAP_EXIT; a compilação final será executada na próxima etapa."
+      - name: Preparar dependências Python
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install "buildozer>=1.5.0" "cython<3.1"
 
       - name: Gerar APK de teste
         run: buildozer -v android debug
