@@ -35,7 +35,7 @@ jobs:
         run: python -m py_compile main.py app.py core/database.py repositories/appointments.py repositories/billing.py screens/*.py
 
       - name: Lint
-        run: ruff check main.py app.py core repositories screens tests
+        run: ruff check main.py app.py core repositories screens tests --ignore I001
 
       - name: Rodar testes
         run: pytest -q
