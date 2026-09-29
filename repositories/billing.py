@@ -1,0 +1,30 @@
+from datetime import datetime
+
+from core.database import Database
+
+
+class BillingRepository:
+    def __init__(self, database: Database):
+        self.database = database
+
+    def create(self, patient_name: str, value_cents: int) -> int:
+        created_at = datetime.now().isoformat(timespec="seconds")
+        return self.database.execute(
+            """
+            INSERT INTO billings(patient_name, value_cents, created_at)
+            VALUES (?, ?, ?)
+            """,
+            (patient_name, value_cents, created_at),
+        )
+
+    def recent(self, limit: int = 5) -> list[dict]:
+        rows = self.database.fetch_all(
+            """
+            SELECT id, patient_name, value_cents, created_at
+            FROM billings
+            ORDER BY id DESC
+            LIMIT ?
+            """,
+            (limit,),
+        )
+        return [dict(row) for row in rows]
