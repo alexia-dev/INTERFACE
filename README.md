@@ -58,3 +58,17 @@ Os domínios de produto continuam separados. O cliente não é a fonte de verdad
 ## Estado
 
 Fundação em implementação. Os novos contratos de plataforma foram adicionados sem remover o shell existente. Antes de produção, precisamos validar build, testes, banco e integração ponta a ponta.
+
+### Nexa Bill configurável
+
+A camada inicial do Nexa Bill agora separa configuração de faturamento do código do aplicativo. A fundação inclui:
+
+- prestadores, convênios e procedimentos como entidades configuráveis;
+- regras de preço por prestador + convênio + procedimento + modalidade;
+- vigência inicial/final para preservar histórico;
+- motor para selecionar automaticamente o valor vigente na data do atendimento;
+- estrutura de mapeamento configurável de colunas para importações;
+- base local para cache/compatibilidade, com evolução planejada para o PostgreSQL da plataforma;
+- trilha inicial de auditoria para alterações administrativas.
+
+A implementação é genérica: dados de demonstração como Dra. Gabriela/Unimed não fazem parte do código do motor.
