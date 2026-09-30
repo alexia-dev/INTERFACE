@@ -1,4 +1,4 @@
-from screens.bill import format_brl, parse_brl_to_cents
+from core.billing_format import format_brl, parse_brl_to_cents
 
 
 def test_parse_brl_values():
