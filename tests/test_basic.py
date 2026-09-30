@@ -36,7 +36,7 @@ def test_modular_frontend_exists():
 
 
 def test_public_repo_does_not_embed_real_patient_data():
-    forbidden = ["CPF", "RG", "CNS", "patient_document", "document_number"]
+    forbidden = ["cpf", "rg", "cns", "patient_document", "document_number"]
     targets = [
         Path("main.py"),
         Path("README.md"),
@@ -47,5 +47,9 @@ def test_public_repo_does_not_embed_real_patient_data():
         for p in targets
         if p.exists()
     ).lower()
+    import re
+
     for token in forbidden:
-        assert token.lower() not in text
+        # Match identifier-like tokens, not arbitrary substrings such as "rg"
+        # inside unrelated words like "organizações".
+        assert re.search(rf"(?<![a-z0-9_]){re.escape(token)}(?![a-z0-9_])", text) is None
