@@ -3,7 +3,7 @@ from pathlib import Path
 from kivy.core.window import Window
 from kivy.lang import Builder
 from kivymd.app import MDApp
-from kivy.properties import ListProperty
+from kivy.properties import BooleanProperty, ListProperty
 from kivymd.uix.snackbar import Snackbar
 
 from core.api_client import ApiClient
@@ -16,9 +16,11 @@ from screens.bill import BillScreen
 from screens.central import CentralScreen
 from screens.home import HomeScreen
 from screens.instrua import InstruaScreen
+from screens.login import LoginScreen
 
 
 class NEXA(MDApp):
+    logged_in = BooleanProperty(False)
     bg_color = ListProperty([0.035, 0.018, 0.075, 1])
     surface_color = ListProperty([0.055, 0.025, 0.11, 0.98])
     card_color = ListProperty([0.08, 0.04, 0.16, 0.92])
@@ -47,6 +49,7 @@ class NEXA(MDApp):
             "bill.kv",
             "admin.kv",
             "central.kv",
+            "login.kv",
         ):
             Builder.load_file(str(root_dir / "ui" / filename))
 
@@ -99,6 +102,9 @@ class NEXA(MDApp):
 
     def close_menu(self):
         self.root.ids.nav.set_state("close")
+
+    def show_app_shell(self):
+        self.root.ids.screen_manager.current = "home"
 
     def go_home(self):
         self.close_menu()
