@@ -5,10 +5,13 @@ on:
   push:
     tags:
       - "v*"
+      - main
+      - "feature/**"
 
 jobs:
   build-windows:
     runs-on: windows-latest
+    timeout-minutes: 25
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,7 +35,7 @@ jobs:
       - name: Gerar executável
         shell: pwsh
         run: |
-          pyinstaller --noconfirm --clean --onefile --windowed --name NEXA --add-data "ui;ui" --collect-all kivy --collect-all kivymd main.py
+          pyinstaller --noconfirm --clean --onefile --windowed --name NEXA --add-data "ui;ui" --collect-all kivymd main.py
 
       - name: Publicar EXE
         uses: actions/upload-artifact@v4
