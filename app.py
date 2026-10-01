@@ -69,6 +69,7 @@ class NEXA(MDApp):
         )
         for screen_class, name in screens:
             screen_manager.add_widget(screen_class(name=name))
+        screen_manager.add_widget(LoginScreen(name="login"))
 
     def toggle_theme(self):
         self.is_dark = not self.is_dark
