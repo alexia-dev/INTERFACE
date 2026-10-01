@@ -1,46 +1,41 @@
+#:import dp kivy.metrics.dp
+
 <CentralScreen>:
-    md_bg_color: 0.988, 0.973, 1, 1
+    md_bg_color: app.bg_color
 
     MDBoxLayout:
         orientation: "vertical"
-
         MDTopAppBar:
-            title: "NEXA / CENTRAL"
+            title: "NEXA CENTRAL   |   Pesquisa"
             left_action_items: [["arrow-left", lambda x: app.go_home()]]
-            md_bg_color: 0.388, 0.055, 0.831, 1
-            specific_text_color: 1, 1, 1, 1
-
+            right_action_items: [["theme-light-dark", lambda x: app.toggle_theme()]]
+            md_bg_color: app.surface_color
+            specific_text_color: 1, 0.90, 1, 1
         MDScrollView:
             do_scroll_x: False
-
             MDBoxLayout:
                 orientation: "vertical"
-                padding: dp(16) if self.width < dp(600) else dp(24)
-                spacing: dp(12) if self.width < dp(600) else dp(14)
+                padding: dp(18) if self.width < dp(700) else dp(28)
+                spacing: dp(14)
                 size_hint_y: None
                 height: self.minimum_height
-
                 NexaTitle:
                     text: "Pesquisa unificada"
-                    font_size: "21sp" if self.width < dp(600) else "22sp"
-
                 MDTextField:
                     id: search_input
-                    hint_text: "Pesquisar paciente ou atendimento"
-                    mode: "rectangle"
-                    size_hint_x: 1
-
+                    hint_text: "Pesquisar cliente, atendimento ou relatório"
+                    mode: "fill"
+                    fill_color_normal: app.surface_color
+                    fill_color_focus: app.card_color
                 NexaButton:
                     text: "PESQUISAR"
-                    size_hint_x: 1
                     on_release: root.search()
-
                 NexaCard:
                     size_hint_y: None
-                    height: dp(210) if self.width < dp(600) else dp(190)
-
+                    height: dp(220)
                     MDLabel:
                         id: search_result
                         text: "Digite algo para pesquisar nos dados locais."
-                        theme_text_color: "Secondary"
+                        theme_text_color: "Custom"
+                        text_color: app.muted_color
                         text_size: self.width, None
