@@ -4,83 +4,68 @@ O NEXA é a plataforma principal para organizar atendimento, faturamento, admini
 
 ## Arquitetura do app
 
-O frontend usa Kivy + KivyMD com uma separação simples para facilitar alterações:
+Frontend em Kivy + KivyMD, organizado para facilitar alterações:
 
-```text
-NEXA/
-├── main.py                 # entrada mínima
-├── app.py                  # composição, navegação e inicialização
-├── ui/                     # aparência e layout
-│   ├── theme.kv            # tokens e componentes visuais
-│   ├── app.kv              # shell + menu lateral
-│   ├── home.kv             # dashboard
-│   ├── instrua.kv          # tela Instrua
-│   ├── bill.kv             # tela Nexa Bill
-│   ├── admin.kv            # tela Nexa Admin
-│   └── central.kv          # tela Central
-├── screens/                # comportamento de cada tela
-├── repositories/           # acesso aos dados
-├── core/                   # infraestrutura, incluindo SQLite
-└── tests/                  # testes
-```
+- `ui/` = visual e layouts
+- `screens/` = comportamento das telas
+- `repositories/` = persistência local/cache legado
+- `core/api_client.py` = comunicação REST com o backend
+- `core/session.py` = sessão em memória
+- `core/database.py` = SQLite local/cache
+- `main.py` = entrada mínima
 
 ### Regra para manutenção
 
-**Visual:** altere somente o `.kv` da tela.
+Visual -> altere o `.kv` da tela.
 
-**Comportamento:** altere o arquivo correspondente em `screens/`.
+Comportamento -> altere `screens/`.
 
-**Dados:** altere o repositório em `repositories/`.
+Dados remotos -> use `core/api_client.py`.
 
-**Infraestrutura:** altere `core/`.
+Dados locais/cache -> `repositories/` e `core/database.py`.
 
-**Entrada do app:** `main.py` quase nunca precisa mudar.
+Sessão -> `core/session.py`.
 
-Essa separação também deixa preparada uma futura troca de SQLite por API/backend sem precisar reescrever as telas.
+Essa separação prepara a troca progressiva do SQLite por API/backend sem reescrever a interface.
 
-## Mobile-first
+## API central
 
-O layout foi adaptado para celular sem criar uma segunda versão da interface. A mesma tela reorganiza os elementos conforme a largura disponível: o dashboard passa de duas colunas para uma, formulários ocupam a largura da tela e as áreas longas usam rolagem vertical.
+A primeira camada de cliente REST usa:
 
-O app não fixa mais uma janela desktop de `1000x680`. A interface usa `size_hint`, `dp`, `minimum_height` e layouts adaptáveis para funcionar em diferentes tamanhos de tela. O Kivy documenta `size_hint` como a forma de distribuir espaço proporcionalmente entre widgets e recomenda `system_size` em cenários onde o tamanho da janela precisa ser definido programaticamente. O KivyMD também oferece componentes responsivos e propriedades adaptativas para esse tipo de interface.
+- `POST /api/v1/auth/login`
+- `GET /api/v1/companies`
+- `GET /api/v1/companies/{companyId}/patients`
+
+O backend de referência é `alexia-dev/Instrua`.
 
 ## Dados locais
 
-O NEXA usa SQLite para persistência local inicial. O banco é criado no diretório gravável específico da aplicação por meio de `App.user_data_dir`.
+SQLite permanece como camada local/compatibilidade durante a transição; não é a fonte de verdade da plataforma conectada.
 
-Tabelas atuais:
+## Módulos
 
-- `appointments`
-- `billings`
+- Instrua: agenda, pacientes, confirmações, check-in e instruções.
+- Nexa Bill: faturamento, lotes, guias, protocolos e relatórios.
+- Nexa Admin: usuários, perfis e administração.
+- Central: pesquisa e visão unificada.
 
-As operações ficam atrás de repositórios, portanto a UI não conhece SQL.
+## Backend / Instrua
 
-## Módulos atuais
+O repositório `alexia-dev/Instrua` já contém a base Java 21 + Spring Boot + PostgreSQL + Flyway, com JWT, perfis, empresas/tenants, pacientes, auditoria, agenda, instruções, notificações e integrações.
 
-- **Instrua:** agenda e atendimento.
-- **Nexa Bill:** lançamentos de faturamento.
-- **Nexa Admin:** administração inicial.
-- **Central:** pesquisa unificada dos dados locais.
-
-## Android e Windows
-
-- `.github/workflows/build-apk.yml` — geração do APK Android.
-- `.github/workflows/build-windows.yml` — build para Windows.
-- `buildozer.spec` — configuração do app Android.
-
-Os workflows precisam ser validados em execução real; a presença do YAML, sozinha, não comprova uma build bem-sucedida.
+A integração completa UI -> API -> PostgreSQL ainda exige validação de execução e expansão dos endpoints.
 
 ## Segurança
 
-Antes de dados reais, o projeto ainda precisa de autenticação, autorização por papel, auditoria, backups, proteção de documentos e estratégia de sincronização.
+Antes de dados reais, a plataforma precisa de autenticação, autorização por papel, isolamento de tenant, auditoria, backups, proteção de documentos e estratégia de sincronização.
 
 Nunca enviar ao repositório público nomes reais de pacientes, documentos pessoais, informações clínicas, planilhas reais, tokens ou senhas.
 
 ## Próximo estágio
 
-1. Login e RBAC.
-2. Cadastros persistentes completos.
-3. Expansão do Instrua.
-4. Guias, lotes e relatórios do Nexa Bill.
-5. Usuários, perfis e auditoria do Nexa Admin.
-6. API/backend e sincronização.
+1. Validar build e testes do backend.
+2. Fechar login do NEXA com API.
+3. Conectar Pacientes e Agenda ao Instrua.
+4. Implementar o domínio do Nexa Bill na API.
+5. Aplicar RBAC por endpoint e módulo.
+6. Publicar builds de teste para Windows e Android.
