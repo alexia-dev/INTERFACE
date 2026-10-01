@@ -2,6 +2,7 @@ from pathlib import Path
 
 from kivy.core.window import Window
 from kivy.lang import Builder
+from kivy.properties import BooleanProperty, ListProperty
 from kivymd.app import MDApp
 from kivymd.uix.snackbar import Snackbar
 
@@ -13,12 +14,20 @@ from screens.bill import BillScreen
 from screens.central import CentralScreen
 from screens.home import HomeScreen
 from screens.instrua import InstruaScreen
+from screens.login import LoginScreen
 
 
 class NEXA(MDApp):
+    logged_in = BooleanProperty(False)
+    bg_color = ListProperty([0.031, 0.012, 0.06, 1])
+    surface_color = ListProperty([0.05, 0.018, 0.09, 0.96])
+    card_color = ListProperty([0.13, 0.06, 0.20, 0.88])
+    text_color = ListProperty([0.98, 0.96, 1, 1])
+    muted_color = ListProperty([0.72, 0.65, 0.78, 1])
+    is_dark = True
     def build(self):
         self.theme_cls.primary_palette = "DeepPurple"
-        self.theme_cls.theme_style = "Light"
+        self.theme_cls.theme_style = "Dark"
         self.title = "NEXA"
         Window.softinput_mode = "resize"
 
@@ -34,6 +43,7 @@ class NEXA(MDApp):
             "bill.kv",
             "admin.kv",
             "central.kv",
+            "login.kv",
         ):
             Builder.load_file(str(root_dir / "ui" / filename))
 
@@ -53,6 +63,28 @@ class NEXA(MDApp):
         )
         for screen_class, name in screens:
             screen_manager.add_widget(screen_class(name=name))
+        screen_manager.add_widget(LoginScreen(name="login"))
+        screen_manager.current = "login"
+
+    def show_app_shell(self):
+        self.logged_in = True
+        self.root.ids.screen_manager.current = "home"
+
+    def toggle_theme(self):
+        self.is_dark = not self.is_dark
+        self.theme_cls.theme_style = "Dark" if self.is_dark else "Light"
+        if self.is_dark:
+            self.bg_color = [0.031, 0.012, 0.06, 1]
+            self.surface_color = [0.05, 0.018, 0.09, 0.96]
+            self.card_color = [0.13, 0.06, 0.20, 0.88]
+            self.text_color = [0.98, 0.96, 1, 1]
+            self.muted_color = [0.72, 0.65, 0.78, 1]
+        else:
+            self.bg_color = [0.96, 0.94, 0.98, 1]
+            self.surface_color = [1, 1, 1, 0.96]
+            self.card_color = [1, 1, 1, 0.96]
+            self.text_color = [0.16, 0.08, 0.22, 1]
+            self.muted_color = [0.38, 0.31, 0.45, 1]
 
     def open_menu(self):
         self.root.ids.nav.set_state("open")
