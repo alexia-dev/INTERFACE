@@ -1,64 +1,104 @@
+#:import dp kivy.metrics.dp
+
 <InstruaScreen>:
-    md_bg_color: 0.988, 0.973, 1, 1
+    md_bg_color: app.bg_color
 
     MDBoxLayout:
         orientation: "vertical"
 
         MDTopAppBar:
-            title: "NEXA / INSTRUA"
+            title: "INSTRUA   |   Gestão • Agendamentos • Instruções"
             left_action_items: [["arrow-left", lambda x: app.go_home()]]
-            md_bg_color: 0.388, 0.055, 0.831, 1
-            specific_text_color: 1, 1, 1, 1
+            right_action_items: [["theme-light-dark", lambda x: app.toggle_theme()]]
+            md_bg_color: app.surface_color
+            specific_text_color: 1, 0.90, 1, 1
 
         MDScrollView:
             do_scroll_x: False
-
             MDBoxLayout:
                 orientation: "vertical"
-                padding: dp(16) if self.width < dp(600) else dp(24)
-                spacing: dp(12) if self.width < dp(600) else dp(14)
+                padding: dp(18) if self.width < dp(700) else dp(28)
+                spacing: dp(14)
                 size_hint_y: None
                 height: self.minimum_height
 
-                NexaTitle:
+                MDLabel:
                     text: "Agenda e atendimento"
-                    font_size: "21sp" if self.width < dp(600) else "22sp"
+                    font_size: "30sp"
+                    bold: True
+                    theme_text_color: "Custom"
+                    text_color: 0.62, 0.22, 0.85, 1
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDBoxLayout:
+                    adaptive_height: True
+                    spacing: dp(7)
+                    ScrollView:
+                        do_scroll_y: False
+                        MDBoxLayout:
+                            adaptive_width: True
+                            spacing: dp(6)
+                            NexaChip:
+                                text: "Salão"
+                            NexaChip:
+                                text: "Clínica"
+                            NexaChip:
+                                text: "Oficina"
+                            NexaChip:
+                                text: "Consultoria"
+                            NexaChip:
+                                text: "Aulas"
+                            NexaChip:
+                                text: "Serviços"
 
                 NexaCard:
                     orientation: "vertical"
                     size_hint_y: None
-                    height: dp(285) if self.width < dp(600) else dp(240)
+                    height: dp(285) if self.width < dp(600) else dp(250)
+
+                    MDLabel:
+                        text: "Novo agendamento"
+                        bold: True
+                        font_size: "19sp"
+                        theme_text_color: "Custom"
+                        text_color: 0.95, 0.84, 1, 1
+                        size_hint_y: None
+                        height: self.texture_size[1]
 
                     MDTextField:
                         id: patient_input
-                        hint_text: "Nome do paciente"
-                        mode: "rectangle"
-                        size_hint_x: 1
+                        hint_text: "Selecionar cliente"
+                        mode: "fill"
+                        fill_color_normal: app.surface_color
+                        fill_color_focus: app.card_color
+                        text_color_normal: 1, 1, 1, 1
+                        hint_text_color_normal: 0.62, 0.55, 0.72, 1
 
                     MDTextField:
                         id: appointment_input
-                        hint_text: "Consulta / procedimento"
-                        mode: "rectangle"
-                        size_hint_x: 1
+                        hint_text: "Serviço / procedimento"
+                        mode: "fill"
+                        fill_color_normal: app.surface_color
+                        fill_color_focus: app.card_color
+                        text_color_normal: 1, 1, 1, 1
+                        hint_text_color_normal: 0.62, 0.55, 0.72, 1
 
                     MDBoxLayout:
                         adaptive_height: True
                         spacing: dp(8)
-
                         NexaButton:
                             text: "AGENDAR"
-                            size_hint_x: 1
                             on_release: root.add_appointment()
-
                         NexaButton:
                             text: "EXCLUIR ÚLTIMO"
-                            size_hint_x: 1
                             on_release: root.delete_latest()
 
                     MDLabel:
                         id: appointment_status
                         text: "Nenhum novo agendamento."
-                        theme_text_color: "Secondary"
+                        theme_text_color: "Custom"
+                        text_color: app.muted_color
                         text_size: self.width, None
 
                 NexaSection:
@@ -66,10 +106,10 @@
 
                 NexaCard:
                     size_hint_y: None
-                    height: dp(190) if self.width < dp(600) else dp(170)
-
+                    height: dp(210)
                     MDLabel:
                         id: recent_list
                         text: "Carregando..."
-                        theme_text_color: "Secondary"
+                        theme_text_color: "Custom"
+                        text_color: 0.82, 0.76, 0.88, 1
                         text_size: self.width, None
