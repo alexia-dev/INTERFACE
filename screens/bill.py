@@ -1,22 +1,9 @@
 from kivymd.app import MDApp
 
+from core.billing_format import format_brl, parse_decimal_amount
 from screens.base import NexaScreen
 
 
-def parse_brl_to_cents(value: str) -> int | None:
-    normalized = value.strip().replace("R$", "").replace(" ", "")
-    normalized = normalized.replace(".", "").replace(",", ".")
-    try:
-        amount = float(normalized)
-    except ValueError:
-        return None
-    if amount < 0:
-        return None
-    return round(amount * 100)
-
-
-def format_brl(cents: int) -> str:
-    return f"R$ {cents / 100:.2f}".replace(".", ",")
 
 
 class BillScreen(NexaScreen):
