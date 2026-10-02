@@ -11,14 +11,14 @@ class BillScreen(NexaScreen):
         self.refresh_recent()
 
     def add_bill(self):
-        patient = self.ids.bill_patient.text.strip()
+        client = self.ids.bill_patient.text.strip()
         value = parse_decimal_amount(self.ids.bill_value.text)
-        if not patient or value is None:
+        if not client or value is None:
             self.ids.bill_status.text = "Preencha atendimento e um valor válido."
             return
 
         app = MDApp.get_running_app()
-        app.billing.create(patient, value)
+        app.billing.create(client, value)
         self.ids.bill_patient.text = ""
         self.ids.bill_value.text = ""
         self.ids.bill_status.text = "Faturamento salvo com sucesso."
@@ -40,6 +40,6 @@ class BillScreen(NexaScreen):
             self.ids.recent_billing.text = "Nenhum lançamento salvo ainda."
             return
         self.ids.recent_billing.text = "\n".join(
-            f"{row['patient_name']} • {format_brl(row['value_cents'])} • {row['created_at']}"
+            f"{row['client_name']} • {format_brl(row['value_cents'])} • {row['created_at']}"
             for row in rows
         )
