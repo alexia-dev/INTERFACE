@@ -14,7 +14,7 @@ class BillingRepository:
             INSERT INTO billings(client_name, value_cents, created_at)
             VALUES (?, ?, ?)
             """,
-            (patient_name, value_cents, created_at),
+            (client_name, value_cents, created_at),
         )
 
     def recent(self, limit: int = 5) -> list[dict]:
