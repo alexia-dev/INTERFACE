@@ -40,25 +40,6 @@ MDScreen:
                 padding: dp(22)
                 spacing: dp(14)
 
-                MDBoxLayout:
-                    adaptive_height: True
-                    spacing: dp(7)
-                    ScrollView:
-                        do_scroll_y: False
-                        MDBoxLayout:
-                            adaptive_width: True
-                            spacing: dp(7)
-                            OneLineChip:
-                                text: "Instrua"
-                            OneLineChip:
-                                text: "Nexa Bill"
-                            OneLineChip:
-                                text: "Nexa AI"
-                            OneLineChip:
-                                text: "Nexa Study"
-                            OneLineChip:
-                                text: "Nexa Work"
-
                 MDLabel:
                     text: "NEXA CENTRAL"
                     theme_text_color: "Custom"
@@ -77,7 +58,7 @@ MDScreen:
                     height: self.texture_size[1]
 
                 MDLabel:
-                    text: "Seu ecossistema em um só lugar."
+                    text: "Automação, dados e inteligência em um só lugar."
                     theme_text_color: "Custom"
                     text_color: 0.72, 0.65, 0.78, 1
                     font_size: "14sp"
@@ -175,7 +156,7 @@ MDScreen:
                                 elevation: 0
                                 padding: dp(12)
                                 md_bg_color: 0.20, 0.12, 0.28, 0.35
-                                on_release: app.open_module("Instrua")
+                                on_release: app.open_module("Nexa AI")
                                 MDBoxLayout:
                                     MDLabel:
                                         text: "🦊 Instrua\n[color=#9e8aaa]Gestão • Agendamentos[/color]"
@@ -183,7 +164,7 @@ MDScreen:
                                         theme_text_color: "Custom"
                                         text_color: 1, 1, 1, 1
                                     MDLabel:
-                                        text: "Ativo"
+                                        text: "Disponível"
                                         halign: "right"
                                         theme_text_color: "Custom"
                                         text_color: 0.45, 0.88, 0.76, 1
@@ -302,13 +283,13 @@ MDScreen:
                                 QuickCard:
                                     on_release: app.open_module("Instrua")
                                     MDLabel:
-                                        text: "🦊"
+                                        text: "✦"
                                         halign: "center"
                                         font_size: "22sp"
                                         theme_text_color: "Custom"
                                         text_color: 1, 0.50, 0.83, 1
                                     MDLabel:
-                                        text: "Instrua"
+                                        text: "Nexa AI"
                                         halign: "center"
                                         font_size: "10sp"
                                         theme_text_color: "Custom"

@@ -7,13 +7,14 @@ from kivymd.app import MDApp
 from kivymd.uix.snackbar import Snackbar
 
 from core.database import Database
+from core.ai import NexaAi
 from repositories.appointments import AppointmentRepository
 from repositories.billing import BillingRepository
 from screens.admin import AdminScreen
 from screens.bill import BillScreen
 from screens.central import CentralScreen
 from screens.home import HomeScreen
-from screens.instrua import InstruaScreen
+from screens.ai import AiScreen
 from screens.login import LoginScreen
 
 
@@ -34,16 +35,17 @@ class NEXA(MDApp):
         self.database = Database(Path(self.user_data_dir) / "nexa.db")
         self.appointments = AppointmentRepository(self.database)
         self.billing = BillingRepository(self.database)
+        self.ai = NexaAi(self.database)
 
         root_dir = Path(__file__).resolve().parent
         for filename in (
             "theme.kv",
             "home.kv",
-            "instrua.kv",
             "bill.kv",
             "admin.kv",
             "central.kv",
             "login.kv",
+            "ai.kv",
         ):
             Builder.load_file(str(root_dir / "ui" / filename))
 
@@ -56,13 +58,13 @@ class NEXA(MDApp):
         screen_manager = root.ids.screen_manager
         screens = (
             (HomeScreen, "home"),
-            (InstruaScreen, "instrua"),
             (BillScreen, "bill"),
             (AdminScreen, "admin"),
             (CentralScreen, "central"),
         )
         for screen_class, name in screens:
             screen_manager.add_widget(screen_class(name=name))
+        screen_manager.add_widget(AiScreen(name="ai"))
         screen_manager.add_widget(LoginScreen(name="login"))
         screen_manager.current = "login"
 
@@ -98,10 +100,10 @@ class NEXA(MDApp):
 
     def open_module(self, module):
         routes = {
-            "Instrua": "instrua",
             "Nexa Bill": "bill",
             "Nexa Admin": "admin",
             "Central": "central",
+            "Nexa AI": "ai",
         }
         self.close_menu()
         self.root.ids.screen_manager.current = routes.get(module, "home")

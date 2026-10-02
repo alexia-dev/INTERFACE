@@ -1,86 +1,71 @@
-# NEXA — Plataforma de Gestão para Clínicas
+# NEXA — Automação, Dados, Processos e Gestão
 
-O NEXA é a plataforma principal para organizar atendimento, faturamento, administração e pesquisa em módulos independentes.
+O NEXA é um produto independente e adaptativo. Ele não é launcher do Instrua e não incorpora o Instrua.
 
-## Arquitetura do app
+A proposta é permitir que a pessoa ou empresa descreva como trabalha e faça o NEXA adaptar módulos, campos, dashboards, regras, relatórios e fluxos ao contexto.
 
-O frontend usa Kivy + KivyMD com uma separação simples para facilitar alterações:
+## Princípios
 
-```text
-NEXA/
-├── main.py                 # entrada mínima
-├── app.py                  # composição, navegação e inicialização
-├── ui/                     # aparência e layout
-│   ├── theme.kv            # tokens e componentes visuais
-│   ├── app.kv              # shell + menu lateral
-│   ├── home.kv             # dashboard
-│   ├── instrua.kv          # tela Instrua
-│   ├── bill.kv             # tela Nexa Bill
-│   ├── admin.kv            # tela Nexa Admin
-│   └── central.kv          # tela Central
-├── screens/                # comportamento de cada tela
-├── repositories/           # acesso aos dados
-├── core/                   # infraestrutura, incluindo SQLite
-└── tests/                  # testes
-```
+- Genérico por padrão: saúde, tecnologia, consultoria, educação, beleza, manutenção, varejo e outros segmentos.
+- Configurável: valores, códigos, regras, campos, fórmulas, categorias e modelos não ficam presos ao código.
+- Automação e dados: importação de Excel/CSV, processamento, validação, relatórios e regras.
+- Faturamento/financeiro como módulos configuráveis, não como definição do produto.
+- Interface desktop/mobile responsiva.
+- Instrua permanece em repositório e produto separados.
 
-### Regra para manutenção
+## Arquitetura atual
 
-**Visual:** altere somente o `.kv` da tela.
+    NEXA/
+    ├── main.py
+    ├── app.py
+    ├── ui/
+    ├── screens/
+    ├── repositories/
+    ├── core/
+    └── tests/
 
-**Comportamento:** altere o arquivo correspondente em `screens/`.
+Visual: altere os arquivos .kv. Comportamento: altere screens/. Dados: altere repositories/. Infraestrutura/regras: altere core/.
 
-**Dados:** altere o repositório em `repositories/`.
+## Persistência
 
-**Infraestrutura:** altere `core/`.
-
-**Entrada do app:** `main.py` quase nunca precisa mudar.
-
-Essa separação também deixa preparada uma futura troca de SQLite por API/backend sem precisar reescrever as telas.
-
-## Mobile-first
-
-O layout foi adaptado para celular sem criar uma segunda versão da interface. A mesma tela reorganiza os elementos conforme a largura disponível: o dashboard passa de duas colunas para uma, formulários ocupam a largura da tela e as áreas longas usam rolagem vertical.
-
-O app não fixa mais uma janela desktop de `1000x680`. A interface usa `size_hint`, `dp`, `minimum_height` e layouts adaptáveis para funcionar em diferentes tamanhos de tela. O Kivy documenta `size_hint` como a forma de distribuir espaço proporcionalmente entre widgets e recomenda `system_size` em cenários onde o tamanho da janela precisa ser definido programaticamente. O KivyMD também oferece componentes responsivos e propriedades adaptativas para esse tipo de interface.
-
-## Dados locais
-
-O NEXA usa SQLite para persistência local inicial. O banco é criado no diretório gravável específico da aplicação por meio de `App.user_data_dir`.
-
-Tabelas atuais:
-
-- `appointments`
-- `billings`
-
-As operações ficam atrás de repositórios, portanto a UI não conhece SQL.
+A primeira fase usa SQLite local em App.user_data_dir. A camada de banco fica separada da UI para permitir evolução posterior para API/backend.
 
 ## Módulos atuais
 
-- **Instrua:** agenda e atendimento.
-- **Nexa Bill:** lançamentos de faturamento.
-- **Nexa Admin:** administração inicial.
-- **Central:** pesquisa unificada dos dados locais.
+- Dashboard
+- Nexa Bill / faturamento
+- Nexa Admin
+- Central de dados
 
-## Android e Windows
+O módulo de faturamento deve evoluir para modelos universais: serviço, produto, projeto, hora, contrato, recorrência, comissão, convênio/seguro ou outros modelos configuráveis.
 
-- `.github/workflows/build-apk.yml` — geração do APK Android.
-- `.github/workflows/build-windows.yml` — build para Windows.
-- `buildozer.spec` — configuração do app Android.
+## Windows e Android
 
-Os workflows precisam ser validados em execução real; a presença do YAML, sozinha, não comprova uma build bem-sucedida.
+- .github/workflows/build-windows.yml — build Windows.
+- .github/workflows/build-apk.yml — build Android.
+- buildozer.spec — configuração Android.
+- Windows usa Kivy 2.2.1 + KivyMD 1.2.0.
+- Android usa a mesma base compatível inicialmente para reduzir divergência entre ambientes.
+
+A existência do workflow não substitui uma execução real bem-sucedida.
 
 ## Segurança
 
-Antes de dados reais, o projeto ainda precisa de autenticação, autorização por papel, auditoria, backups, proteção de documentos e estratégia de sincronização.
+Antes de dados reais, ainda são necessários autenticação, autorização/RBAC, auditoria, backup/recuperação, proteção de documentos, gestão de segredos e estratégia de sincronização.
 
-Nunca enviar ao repositório público nomes reais de pacientes, documentos pessoais, informações clínicas, planilhas reais, tokens ou senhas.
+Nunca versionar dados reais, documentos pessoais, tokens ou senhas.
 
-## Próximo estágio
+## Próximas etapas
 
-1. Login e RBAC.
-2. Cadastros persistentes completos.
-3. Expansão do Instrua.
-4. Guias, lotes e relatórios do Nexa Bill.
-5. Usuários, perfis e auditoria do Nexa Admin.
-6. API/backend e sincronização.
+1. Consolidar o núcleo adaptativo/configurável.
+2. Evoluir importação Excel/CSV e mapeamento de colunas.
+3. Transformar regras de faturamento em motor genérico.
+4. Criar dashboard contextual e automações.
+5. Evoluir API/backend e sincronização.
+6. Validar builds Windows e Android em execução real.
+
+## NEXA AI
+
+O NEXA possui um AI Core independente com contexto, ferramentas, permissões e provider substituível. Por padrão ele funciona em modo local/mock para desenvolvimento e testes. Para conectar um provedor compatível com a API de chat, configure `NEXA_AI_API_KEY`, `NEXA_AI_BASE_URL` e `NEXA_AI_MODEL` no ambiente; nunca coloque chaves no repositório.
+
+Ferramentas iniciais: resumo operacional, consulta de faturamento e detecção de possíveis duplicidades. Ações mutáveis ficam bloqueadas até confirmação explícita.

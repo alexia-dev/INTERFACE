@@ -1,6 +1,6 @@
 [app]
 
-title = NEXA Clínica
+title = NEXA
 package.name = nexa
 package.domain = br.com.nexa
 source.dir = .
@@ -14,7 +14,7 @@ fullscreen = 0
 
 # Python-for-Android dependencies
 # Keep both target Python and host Python on the same stable version.
-requirements = python3==3.12.10,hostpython3==3.12.10,kivy==2.3.0,kivymd==1.2.0
+requirements = python3==3.12.10,hostpython3==3.12.10,kivy==2.2.1,kivymd==1.2.0
 
 # Use the stable p4a branch compatible with Python 3.12.
 p4a.branch = master
