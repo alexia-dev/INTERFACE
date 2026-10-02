@@ -1,4 +1,4 @@
-from screens.bill import format_brl, parse_brl_to_cents
+from screens.bill import format_brl, parse_decimal_amount
 
 
 def test_parse_brl_values():
