@@ -63,3 +63,9 @@ Nunca versionar dados reais, documentos pessoais, tokens ou senhas.
 4. Criar dashboard contextual e automações.
 5. Evoluir API/backend e sincronização.
 6. Validar builds Windows e Android em execução real.
+
+## NEXA AI
+
+O NEXA possui um AI Core independente com contexto, ferramentas, permissões e provider substituível. Por padrão ele funciona em modo local/mock para desenvolvimento e testes. Para conectar um provedor compatível com a API de chat, configure `NEXA_AI_API_KEY`, `NEXA_AI_BASE_URL` e `NEXA_AI_MODEL` no ambiente; nunca coloque chaves no repositório.
+
+Ferramentas iniciais: resumo operacional, consulta de faturamento e detecção de possíveis duplicidades. Ações mutáveis ficam bloqueadas até confirmação explícita.
