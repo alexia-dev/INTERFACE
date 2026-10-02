@@ -7,7 +7,7 @@ class BillingRepository:
     def __init__(self, database: Database):
         self.database = database
 
-    def create(self, patient_name: str, value_cents: int) -> int:
+    def create(self, client_name: str, value_cents: int) -> int:
         created_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
         return self.database.execute(
             """
