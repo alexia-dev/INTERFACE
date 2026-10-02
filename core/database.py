@@ -22,14 +22,14 @@ class Database:
                 """
                 CREATE TABLE IF NOT EXISTS appointments (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    patient_name TEXT NOT NULL,
+                    client_name TEXT NOT NULL,
                     appointment_type TEXT NOT NULL,
                     created_at TEXT NOT NULL
                 );
 
                 CREATE TABLE IF NOT EXISTS billings (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    patient_name TEXT NOT NULL,
+                    client_name TEXT NOT NULL,
                     value_cents INTEGER NOT NULL CHECK(value_cents >= 0),
                     created_at TEXT NOT NULL
                 );
