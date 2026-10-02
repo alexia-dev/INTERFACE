@@ -19,7 +19,7 @@ class BillScreen(NexaScreen):
 
         app = MDApp.get_running_app()
         app.billing.create(client, value)
-        self.ids.bill_patient.text = ""
+        self.ids.bill_client.text = ""
         self.ids.bill_value.text = ""
         self.ids.bill_status.text = "Faturamento salvo com sucesso."
         self.refresh_recent()
