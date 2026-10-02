@@ -25,7 +25,7 @@ class BillScreen(NexaScreen):
 
     def add_bill(self):
         patient = self.ids.bill_patient.text.strip()
-        value = parse_brl_to_cents(self.ids.bill_value.text)
+        value = parse_decimal_amount(self.ids.bill_value.text)
         if not patient or value is None:
             self.ids.bill_status.text = "Preencha atendimento e um valor válido."
             return
