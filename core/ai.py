@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from core.ai_provider import AiProvider, AiRequest, AiDecision, MockAiProvider
+from core.ai_provider import AiProvider, AiRequest, AiDecision
+from core.ai_router import AiProviderRouter
 from core.ai_tools import AiTools
 
 
@@ -9,7 +10,7 @@ class NexaAi:
 
     def __init__(self, database, provider: AiProvider | None = None):
         self.tools=AiTools(database)
-        self.provider=provider or MockAiProvider()
+        self.provider=provider or AiProviderRouter()
 
     def ask(self, message: str) -> dict:
         decision: AiDecision=self.provider.decide(AiRequest(message, {"product":"NEXA"}, self.TOOLS))
