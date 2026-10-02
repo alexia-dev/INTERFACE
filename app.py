@@ -13,7 +13,6 @@ from screens.admin import AdminScreen
 from screens.bill import BillScreen
 from screens.central import CentralScreen
 from screens.home import HomeScreen
-from screens.instrua import InstruaScreen
 from screens.login import LoginScreen
 
 
@@ -39,7 +38,6 @@ class NEXA(MDApp):
         for filename in (
             "theme.kv",
             "home.kv",
-            "instrua.kv",
             "bill.kv",
             "admin.kv",
             "central.kv",
@@ -56,7 +54,6 @@ class NEXA(MDApp):
         screen_manager = root.ids.screen_manager
         screens = (
             (HomeScreen, "home"),
-            (InstruaScreen, "instrua"),
             (BillScreen, "bill"),
             (AdminScreen, "admin"),
             (CentralScreen, "central"),
@@ -98,7 +95,6 @@ class NEXA(MDApp):
 
     def open_module(self, module):
         routes = {
-            "Instrua": "instrua",
             "Nexa Bill": "bill",
             "Nexa Admin": "admin",
             "Central": "central",
